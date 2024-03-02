@@ -9,9 +9,9 @@ import retrofit2.http.Query
 interface WeatherWebService {
 
     @GET("onecall?")
-    suspend fun getCurrentWeatherTCallBack(@Query("lat") lat: String?,
-                                           @Query("lon") lon: String?,
-                                           @Query("appid") appId:String=Constants.API_KEY,
+    suspend fun getCurrentWeather(@Query("lat") lat: Double,
+                                           @Query("lon") lon: Double,
+                                           @Query("appid") appId:String = Constants.API_KEY,
                                            @Query("lang") lang:String,
                                            @Query("units") units:String ): Response<WeatherResponse>
 }
