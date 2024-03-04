@@ -6,15 +6,282 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".home.view.HomeFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/sunny_bg"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
 
+
+    <com.github.matteobattilana.weather.WeatherView
+        android:id="@+id/weather_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+    <TextView
+        android:id="@+id/country_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="Fayoum, Egypt"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/des_temp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Mostly cloud"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/country_name"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/temp_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="208dp"
+        android:text="0"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="76sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.391"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/temp_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="208dp"
+        android:text="\u00B0"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="56sp"
+        app:layout_constraintStart_toEndOf="@+id/temp_value"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/temp_measure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="208dp"
+        android:text="C"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="76sp"
+        app:layout_constraintStart_toEndOf="@+id/temp_view"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/wind_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:src="@drawable/wind"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/temp_value" />
+
+    <TextView
+        android:id="@+id/text_view2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="-KM"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/wind_image"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="@+id/wind_image"
+        app:layout_constraintTop_toBottomOf="@+id/wind_image" />
+
+    <TextView
+        android:id="@+id/wind_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/text_view2"
+        app:layout_constraintTop_toTopOf="@+id/text_view2" />
+
+    <TextView
+        android:id="@+id/wind_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="wind"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/text_view2"
+        app:layout_constraintEnd_toEndOf="@id/text_view2"
+        app:layout_constraintTop_toBottomOf="@+id/wind_value" />
+
+
+
+
+
+    <ImageView
+        android:id="@+id/humitiy_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:src="@drawable/humidity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/temp_value" />
+
+    <TextView
+        android:id="@+id/text_view6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="%"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/humitiy_image"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="@+id/humitiy_image"
+        app:layout_constraintTop_toBottomOf="@+id/humitiy_image" />
+
+    <TextView
+        android:id="@+id/humitiy_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/text_view6"
+        app:layout_constraintTop_toTopOf="@+id/text_view6" />
+
+    <TextView
+        android:id="@+id/humitiy_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Humidity"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/text_view6"
+        app:layout_constraintEnd_toEndOf="@id/text_view6"
+        app:layout_constraintTop_toBottomOf="@+id/humitiy_value" />
+
+
+    <TextView
+        android:id="@+id/temp_value_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:text="9"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/down_temp"
+        app:layout_constraintTop_toBottomOf="@+id/temp_value"  />
+
+    <ImageView
+        android:id="@+id/down_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_down"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/temp_value"
+        app:layout_constraintTop_toBottomOf="@+id/temp_value"
+        />
+    <TextView
+        android:id="@+id/temp_view_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\u00B0"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="8sp"
+        app:layout_constraintStart_toEndOf="@+id/temp_value_down"
+        app:layout_constraintTop_toBottomOf="@+id/temp_value" />
+
+    <TextView
+        android:id="@+id/temp_measure_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="C"
+        android:layout_marginTop="4dp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/temp_view_down"
+        app:layout_constraintTop_toBottomOf="@+id/temp_value"  />
+
+
+    <TextView
+        android:id="@+id/temp_value_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:text="9"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/temp_measure_up"
+        app:layout_constraintTop_toBottomOf="@+id/temp_measure" />
+
+    <ImageView
+        android:id="@+id/up_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/arrow_up"
+        app:layout_constraintEnd_toEndOf="@+id/temp_measure"
+        app:layout_constraintTop_toBottomOf="@+id/temp_measure" />
+
+    <TextView
+        android:id="@+id/temp_view_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\u00B0"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="8sp"
+        app:layout_constraintTop_toTopOf="@+id/temp_measure_up"
+        app:layout_constraintEnd_toStartOf="@+id/temp_measure_up"
+         />
+
+    <TextView
+        android:id="@+id/temp_measure_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:text="C"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/up_temp"
+        app:layout_constraintTop_toBottomOf="@+id/temp_measure" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

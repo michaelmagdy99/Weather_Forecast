@@ -2,6 +2,8 @@ package com.example.weatherforecast.model.remote
 
 import com.example.weatherforecast.model.dto.WeatherResponse
 import com.example.weatherforecast.utilities.Constants
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class WeatherRemoteDataSource private constructor(private val service: WeatherWebService) : IWeatherRemoteDataSource{
 
@@ -17,13 +19,13 @@ class WeatherRemoteDataSource private constructor(private val service: WeatherWe
         }
     }
 
-    override suspend fun getCurrentWeather(
+    override fun getCurrentWeather(
         lat: Double,
         lon: Double,
         lang: String,
         units: String
-    ): WeatherResponse {
-        return service.getCurrentWeather(lat,lon,Constants.API_KEY,lang,units).body()!!
+    )= flow {
+        emit(service.getCurrentWeather(lat,lon,Constants.API_KEY,lang,units))
     }
 
 

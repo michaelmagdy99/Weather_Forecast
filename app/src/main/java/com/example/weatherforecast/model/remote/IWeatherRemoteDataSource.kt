@@ -1,10 +1,11 @@
 package com.example.weatherforecast.model.remote
 
 import com.example.weatherforecast.model.dto.WeatherResponse
+import kotlinx.coroutines.flow.Flow
 
 interface IWeatherRemoteDataSource {
-    suspend fun getCurrentWeather(lat: Double,
+     fun getCurrentWeather(lat: Double,
                                   lon: Double,
                                   lang:String,
-                                  units:String ) : WeatherResponse
+                                  units:String ) : Flow<WeatherResponse>
 }

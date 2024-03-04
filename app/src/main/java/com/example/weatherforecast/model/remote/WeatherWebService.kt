@@ -13,5 +13,5 @@ interface WeatherWebService {
                                            @Query("lon") lon: Double,
                                            @Query("appid") appId:String = Constants.API_KEY,
                                            @Query("lang") lang:String,
-                                           @Query("units") units:String ): Response<WeatherResponse>
+                                           @Query("units") units:String ): WeatherResponse
 }

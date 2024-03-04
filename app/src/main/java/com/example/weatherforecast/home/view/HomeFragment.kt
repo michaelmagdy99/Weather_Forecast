@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.weatherforecast.MainActivity
 import com.example.weatherforecast.databinding.FragmentHomeBinding
 import com.example.weatherforecast.home.view_model.HomeViewModel
 import com.example.weatherforecast.home.view_model.HomeViewModelFactory
@@ -49,9 +50,12 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         homeBinding = FragmentHomeBinding.inflate(inflater, container, false)
+
         getLocation()
+
         return homeBinding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -154,4 +158,5 @@ class HomeFragment : Fragment() {
         }
 
     }
+
 }
