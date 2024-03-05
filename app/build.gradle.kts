@@ -93,6 +93,9 @@ dependencies {
     //weatherView
     implementation("com.github.MatteoBattilana:WeatherView:2.0.3")
 
+    //cardView
+    implementation ("androidx.cardview:cardview:1.0.0")
+
 }
 
 kapt{

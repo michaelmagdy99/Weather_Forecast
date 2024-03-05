@@ -9,26 +9,29 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.HourlyItemBinding
 import com.example.weatherforecast.model.dto.HourlyItem
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HourlyAdapter: ListAdapter<HourlyItem, HourlyAdapter.HourlyViewHolder>(HourlyDiffUtil()) {
-    lateinit var houlyItemBinding: HourlyItemBinding
-    class HourlyViewHolder(val houlyItemBinding: HourlyItemBinding) : RecyclerView.ViewHolder(houlyItemBinding.root)
+    class HourlyViewHolder(val hourlyItemBinding: HourlyItemBinding) : RecyclerView.ViewHolder(hourlyItemBinding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyViewHolder {
         val inflater: LayoutInflater =
             parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-        houlyItemBinding = HourlyItemBinding.inflate(inflater, parent,false)
-        return HourlyViewHolder(houlyItemBinding)    }
+        val hourlyItemBinding = HourlyItemBinding.inflate(inflater, parent,false)
+        return HourlyViewHolder(hourlyItemBinding)
+    }
 
     override fun onBindViewHolder(holder: HourlyViewHolder, position: Int) {
         var current = getItem(position)
 
-      //  holder.houlyItemBinding.textHour.text = getFormattedHour(current.dt)
+        holder.hourlyItemBinding.textHour.text = getFormattedHour(current.dt?.toLong()) ?: "00:00"
 
-        holder.houlyItemBinding.tempImage.setImageResource(R.drawable.sunny)
+        holder.hourlyItemBinding.tempImage.setImageResource(R.drawable.sunny)
 
-       // holder.houlyItemBinding.textTemperature.text = "${current.temp}°C"
+        holder.hourlyItemBinding.textTemperature.text = "${current.temp}°C"
     }
 }
 
@@ -44,16 +47,8 @@ class HourlyDiffUtil : DiffUtil.ItemCallback<HourlyItem>(){
 
 }
 
-private fun getFormattedHour(hour: Int?): String {
-    if (hour == null) return ""
-
-    val formattedHour = if (hour == 12 || hour == 0) {
-        "12"
-    } else {
-        (hour % 12).toString()
-    }
-
-    val amPm = if (hour < 12) "AM" else "PM"
-
-    return "$formattedHour:00 $amPm"
+private fun getFormattedHour(hour: Long?): String {
+    val sdf = SimpleDateFormat("h:mm a", Locale.getDefault())
+    val date = Date(hour?.times(1000) ?: 0)
+    return sdf.format(date)
 }

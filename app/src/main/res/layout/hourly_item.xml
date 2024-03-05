@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardViewHourly"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="@drawable/card_background"
-    app:cardCornerRadius="18dp">
+    app:cardElevation="0dp"
+    app:contentPaddingBottom="4dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:strokeColor="@color/black"
+    app:strokeWidth="0.5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="8dp"
+        >
 
         <TextView
             android:id="@+id/text_hour"
@@ -23,10 +30,11 @@
             android:text="12:00 PM" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:id="@+id/temp_image"
             android:src="@drawable/sunny"
+            android:layout_gravity="center"
             android:layout_marginVertical="8dp"
             />
 
@@ -41,4 +49,4 @@
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

@@ -53,6 +53,8 @@ class HomeFragment : Fragment() {
     private lateinit var layoutManagerDaily: LinearLayoutManager
     private lateinit var layoutManagerHourly: LinearLayoutManager
 
+    private var isTakeLocation : Boolean = false
+
     lateinit var fusedClient : FusedLocationProviderClient
     var currentLat = ""
     var currentLong = ""
@@ -62,6 +64,7 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         homeBinding = FragmentHomeBinding.inflate(inflater, container, false)
+
         return homeBinding.root
     }
 
@@ -87,7 +90,7 @@ class HomeFragment : Fragment() {
 
         layoutManagerDaily = LinearLayoutManager(context)
         homeBinding.recyclerDailyWeather.layoutManager = layoutManagerDaily
-        layoutManagerHourly = LinearLayoutManager(context)
+        layoutManagerHourly = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         homeBinding.recyclerHourlyWeather.layoutManager = layoutManagerHourly
 
         homeBinding.recyclerDailyWeather.adapter = dailyAdapter
@@ -101,7 +104,7 @@ class HomeFragment : Fragment() {
                         homeBinding.desTemp.text = it.weatherResponse.current?.weather?.get(0)?.description ?: "UnKnow"
                         homeBinding.humitiyValue.text = it.weatherResponse.current?.humidity.toString() ?: "0"
                         homeBinding.windValue.text = it.weatherResponse.current?.windSpeed.toString() ?: "0"
-                        homeBinding.tempValue.text = it.weatherResponse.current?.temp.toString() ?: "0"
+                        homeBinding.tempValue.text = "%.0f".format(it.weatherResponse.current?.temp) ?: "0"
                         hourlyAdapter.submitList(it.weatherResponse.hourly)
                         dailyAdapter.submitList(it.weatherResponse.daily)
                     }
@@ -131,7 +134,7 @@ class HomeFragment : Fragment() {
     private fun getAddress(lat: Double, lng: Double): String {
         val geocoder = Geocoder(requireContext())
         val list = geocoder.getFromLocation(lat, lng, 1)
-        return list?.get(0)?.countryName + ","+ list?.get(0)?.featureName ?: "UnKnown"
+        return list?.get(0)?.countryName + ", "+ list?.get(0)?.adminArea ?: "UnKnown"
     }
 
 
@@ -196,17 +199,24 @@ class HomeFragment : Fragment() {
 
     private val locationCallBack : LocationCallback = object : LocationCallback() {
         override fun onLocationResult(p0: LocationResult) {
-            val lastLocation: Location? = p0.lastLocation
-             currentLong = lastLocation?.longitude.toString()
-             currentLat = lastLocation?.latitude.toString()
 
-             homeBinding.countryName.text = getAddress(currentLat.toDouble(), currentLong.toDouble())
+            if (!isTakeLocation) {
+                isTakeLocation = true
+                val lastLocation: Location? = p0.lastLocation
+                currentLong = lastLocation?.longitude.toString()
+                currentLat = lastLocation?.latitude.toString()
 
-             homeViewModel.getCurrentWeather(
-                 currentLat.toDouble(),
-                 currentLong.toDouble(),
-                 "ar",
-                 "celsius")
+                homeBinding.countryName.text =
+                    getAddress(currentLat.toDouble(), currentLong.toDouble())
+
+                homeViewModel.getCurrentWeather(
+                    currentLat.toDouble(),
+                    currentLong.toDouble(),
+                    "en",
+                    "metric"
+                )
+
+            }
         }
 
     }
