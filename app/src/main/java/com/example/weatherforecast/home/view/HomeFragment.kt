@@ -27,6 +27,7 @@ import com.example.weatherforecast.home.view_model.HomeViewModelFactory
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
 import com.example.weatherforecast.model.repository.WeatherRepository
 import com.example.weatherforecast.utilities.ApiState
+import com.example.weatherforecast.utilities.Formatter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -36,6 +37,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 const val PERMISSION_ID = 3012
@@ -101,9 +105,12 @@ class HomeFragment : Fragment() {
                 when(it){
                     is ApiState.Success -> {
                         Log.i("TAG", "onViewCreated: "+ it.weatherResponse.timezone)
+                        homeBinding.currentData.text = Formatter.getCurrentDataAndTime()
                         homeBinding.desTemp.text = it.weatherResponse.current?.weather?.get(0)?.description ?: "UnKnow"
-                        homeBinding.humitiyValue.text = it.weatherResponse.current?.humidity.toString() ?: "0"
-                        homeBinding.windValue.text = it.weatherResponse.current?.windSpeed.toString() ?: "0"
+                        homeBinding.humitiyValue.text = (it.weatherResponse.current?.humidity ?: "0").toString()
+                        homeBinding.textView2.text = (it.weatherResponse.current?.windSpeed  ?: "0").toString()
+                        homeBinding.pressureValue.text = (it.weatherResponse.current?.pressure  ?: "0").toString()
+                        homeBinding.cloudValue.text = (it.weatherResponse.current?.clouds  ?: "0").toString()
                         homeBinding.tempValue.text = "%.0f".format(it.weatherResponse.current?.temp) ?: "0"
                         hourlyAdapter.submitList(it.weatherResponse.hourly)
                         dailyAdapter.submitList(it.weatherResponse.daily)

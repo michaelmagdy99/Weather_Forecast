@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.DailyItemBinding
 import com.example.weatherforecast.model.dto.DailyItem
+import com.example.weatherforecast.utilities.Formatter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -27,13 +28,13 @@ class DailyAdapter:ListAdapter<DailyItem, DailyAdapter.DailyViewHolder>(DailyDif
     override fun onBindViewHolder(holder: DailyViewHolder, position: Int) {
         var current = getItem(position)
 
-        holder.dailyItemBinding.textDay.text = getDayOfWeek(current.dt?.toLong())
+        holder.dailyItemBinding.textDay.text = Formatter.getDayOfWeek(current.dt?.toLong())
 
         holder.dailyItemBinding.imageWeather.setImageResource(R.drawable.sunny)
 
         holder.dailyItemBinding.textDescription.text = current.weather?.get(0)?.description
 
-        holder.dailyItemBinding.textTemperature.text = "${current.temp?.day}°C"
+        holder.dailyItemBinding.textTemperature.text = "${current.temp?.min} / ${current.temp?.max}°C"
 
     }
 }
@@ -48,11 +49,4 @@ class DailyDiffUtil : DiffUtil.ItemCallback<DailyItem>(){
         return oldItem == newItem
     }
 
-}
-
-private fun getDayOfWeek(timestamp: Long?): String {
-    val date = Date(timestamp!! * 1000)
-    val sdf = SimpleDateFormat("EEE", Locale.getDefault())
-    val dayOfWeek: String = sdf.format(date)
-    return dayOfWeek ?: ""
 }

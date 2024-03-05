@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.HourlyItemBinding
 import com.example.weatherforecast.model.dto.HourlyItem
+import com.example.weatherforecast.utilities.Formatter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -27,7 +28,7 @@ class HourlyAdapter: ListAdapter<HourlyItem, HourlyAdapter.HourlyViewHolder>(Hou
     override fun onBindViewHolder(holder: HourlyViewHolder, position: Int) {
         var current = getItem(position)
 
-        holder.hourlyItemBinding.textHour.text = getFormattedHour(current.dt?.toLong()) ?: "00:00"
+        holder.hourlyItemBinding.textHour.text = Formatter.getFormattedHour(current.dt?.toLong()) ?: "00:00"
 
         holder.hourlyItemBinding.tempImage.setImageResource(R.drawable.sunny)
 
@@ -45,10 +46,4 @@ class HourlyDiffUtil : DiffUtil.ItemCallback<HourlyItem>(){
         return oldItem == newItem
     }
 
-}
-
-private fun getFormattedHour(hour: Long?): String {
-    val sdf = SimpleDateFormat("h:mm a", Locale.getDefault())
-    val date = Date(hour?.times(1000) ?: 0)
-    return sdf.format(date)
 }

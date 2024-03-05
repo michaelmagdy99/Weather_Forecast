@@ -10,24 +10,22 @@
     app:contentPaddingBottom="4dp"
     app:cardPreventCornerOverlap="true"
     app:cardBackgroundColor="@android:color/transparent"
-    app:strokeColor="@color/black"
     app:strokeWidth="0.5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="6dp"
         android:background="@android:color/transparent"
         >
-
-
 
     <!-- Day of the week -->
         <TextView
             android:id="@+id/text_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:text="Monday"
             android:textStyle="bold"
@@ -43,32 +41,32 @@
             android:layout_marginStart="16dp"
             android:layout_toEndOf="@id/text_day"
             android:src="@drawable/sunny"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.387"
+            app:layout_constraintHorizontal_bias="0.443"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/text_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:layout_marginStart="16sp"
+            android:layout_marginTop="8dp"
             android:text="Sunny"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/white"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/image_weather"
+            app:layout_constraintEnd_toEndOf="@+id/image_weather"
+            app:layout_constraintStart_toStartOf="@+id/image_weather"
+            app:layout_constraintTop_toBottomOf="@+id/image_weather"
             />
 
         <TextView
             android:id="@+id/text_temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:textSize="13sp"
             android:text="20°C"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
