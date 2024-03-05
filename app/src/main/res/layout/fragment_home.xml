@@ -136,7 +136,7 @@
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@id/text_view2"
+        app:layout_constraintStart_toStartOf="@id/wind_value"
         app:layout_constraintEnd_toEndOf="@id/text_view2"
         app:layout_constraintTop_toBottomOf="@+id/wind_value" />
 
@@ -186,7 +186,7 @@
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/text_view6"
+        app:layout_constraintStart_toStartOf="@+id/humitiy_value"
         app:layout_constraintEnd_toEndOf="@id/text_view6"
         app:layout_constraintTop_toBottomOf="@+id/humitiy_value" />
 
@@ -283,5 +283,38 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/up_temp"
         app:layout_constraintTop_toBottomOf="@+id/temp_measure" />
+
+
+    <!-- Daily Weather RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_daily_weather"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/recycler_hourly_weather"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/daily_item"
+        tools:itemCount="7"
+        />
+
+    <!-- Hourly Weather RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        tools:itemCount="24"
+        android:id="@+id/recycler_hourly_weather"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/temp_value_down"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="8dp"
+        android:layout_marginTop="26dp"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/hourly_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

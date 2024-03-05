@@ -1,5 +1,6 @@
 package com.example.weatherforecast.home.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,26 +17,22 @@ import kotlinx.coroutines.withContext
 
 class HomeViewModel(private val iWeatherRepo : WeatherRepository) : ViewModel() {
 
-    private val _weatherMutableLiveData = MutableStateFlow<ApiState>(ApiState.Loading)
+    private val _weatherMutableStateFlow = MutableStateFlow<ApiState>(ApiState.Loading)
 
-    val weatherLiveData : StateFlow<ApiState> = _weatherMutableLiveData
+    val weatherStateFlow : StateFlow<ApiState> = _weatherMutableStateFlow
 
-    init {
-         getCurrentWeather(33.44,
-                              -90.08,
-                              "en",
-                              "")
-    }
-    fun getCurrentWeather(lat: Double,
-                          lon: Double,
-                          lang: String,
-                          units: String){
+
+     fun getCurrentWeather(lat: Double,
+                                  lon: Double,
+                                  lang: String,
+                                  units: String){
 
         viewModelScope.launch(Dispatchers.IO) {
           iWeatherRepo.getCurrentWeather(lat,lon,lang,units)
-              .catch { _weatherMutableLiveData.value = ApiState.Failed(it) }
+              .catch { _weatherMutableStateFlow.value = ApiState.Failed(it) }
               .collect{
-                _weatherMutableLiveData.value = ApiState.Success(it)
+                  Log.i("TAG", "onViewCreated: "+ it.timezone)
+                  _weatherMutableStateFlow.value = ApiState.Success(it)
             }
         }
     }

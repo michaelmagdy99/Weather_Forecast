@@ -18,17 +18,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherforecast.MainActivity
 import com.example.weatherforecast.databinding.FragmentHomeBinding
 import com.example.weatherforecast.home.view_model.HomeViewModel
 import com.example.weatherforecast.home.view_model.HomeViewModelFactory
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
 import com.example.weatherforecast.model.repository.WeatherRepository
+import com.example.weatherforecast.utilities.ApiState
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 const val PERMISSION_ID = 3012
@@ -40,6 +47,11 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var homeViewModelFactory: HomeViewModelFactory
 
+    private lateinit var dailyAdapter: DailyAdapter
+    private lateinit var hourlyAdapter: HourlyAdapter
+
+    private lateinit var layoutManagerDaily: LinearLayoutManager
+    private lateinit var layoutManagerHourly: LinearLayoutManager
 
     lateinit var fusedClient : FusedLocationProviderClient
     var currentLat = ""
@@ -50,10 +62,12 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         homeBinding = FragmentHomeBinding.inflate(inflater, container, false)
-
-        getLocation()
-
         return homeBinding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getLocation()
     }
 
 
@@ -66,14 +80,46 @@ class HomeFragment : Fragment() {
                // WeatherLocalDataSource.getInstance(requireContext())
             )
         )
-
         homeViewModel = ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
 
-        homeViewModel.weatherLiveData.observe(viewLifecycleOwner){
-            Log.i("TAG", "onViewCreated: ${it.timezone}")
-        }
-    }
+        dailyAdapter = DailyAdapter()
+        hourlyAdapter = HourlyAdapter()
 
+        layoutManagerDaily = LinearLayoutManager(context)
+        homeBinding.recyclerDailyWeather.layoutManager = layoutManagerDaily
+        layoutManagerHourly = LinearLayoutManager(context)
+        homeBinding.recyclerHourlyWeather.layoutManager = layoutManagerHourly
+
+        homeBinding.recyclerDailyWeather.adapter = dailyAdapter
+        homeBinding.recyclerHourlyWeather.adapter = hourlyAdapter
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            homeViewModel.weatherStateFlow.collectLatest {
+                when(it){
+                    is ApiState.Success -> {
+                        Log.i("TAG", "onViewCreated: "+ it.weatherResponse.timezone)
+                        homeBinding.desTemp.text = it.weatherResponse.current?.weather?.get(0)?.description ?: "UnKnow"
+                        homeBinding.humitiyValue.text = it.weatherResponse.current?.humidity.toString() ?: "0"
+                        homeBinding.windValue.text = it.weatherResponse.current?.windSpeed.toString() ?: "0"
+                        homeBinding.tempValue.text = it.weatherResponse.current?.temp.toString() ?: "0"
+                        hourlyAdapter.submitList(it.weatherResponse.hourly)
+                        dailyAdapter.submitList(it.weatherResponse.daily)
+                    }
+                    is ApiState.Failed ->{
+                        Log.i("TAG", "onViewCreated: failed" + it.msg.toString())
+
+                    }
+                    is ApiState.Loading ->{
+                        Log.i("TAG", "onViewCreated: loading")
+                    }
+                    else -> {
+                        Log.i("TAG", "onViewCreated: else")
+                    }
+                }
+            }
+        }
+
+    }
 
     private fun isLocationEnabled(): Boolean {
 
@@ -85,7 +131,7 @@ class HomeFragment : Fragment() {
     private fun getAddress(lat: Double, lng: Double): String {
         val geocoder = Geocoder(requireContext())
         val list = geocoder.getFromLocation(lat, lng, 1)
-        return list?.get(0)?.getAddressLine(0) ?: "0"
+        return list?.get(0)?.countryName + ","+ list?.get(0)?.featureName ?: "UnKnown"
     }
 
 
@@ -152,9 +198,15 @@ class HomeFragment : Fragment() {
         override fun onLocationResult(p0: LocationResult) {
             val lastLocation: Location? = p0.lastLocation
              currentLong = lastLocation?.longitude.toString()
-             Log.i("TAG", "onLocationResult: "+currentLong)
              currentLat = lastLocation?.latitude.toString()
-             Log.i("TAG", "onLocationResult: "+currentLat)
+
+             homeBinding.countryName.text = getAddress(currentLat.toDouble(), currentLong.toDouble())
+
+             homeViewModel.getCurrentWeather(
+                 currentLat.toDouble(),
+                 currentLong.toDouble(),
+                 "ar",
+                 "celsius")
         }
 
     }
