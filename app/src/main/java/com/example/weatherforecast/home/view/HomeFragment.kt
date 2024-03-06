@@ -20,7 +20,6 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weatherforecast.MainActivity
 import com.example.weatherforecast.databinding.FragmentHomeBinding
 import com.example.weatherforecast.home.view_model.HomeViewModel
 import com.example.weatherforecast.home.view_model.HomeViewModelFactory
@@ -186,6 +185,8 @@ class HomeFragment : Fragment() {
         if(requestCode == PERMISSION_ID){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 getLocation()
+            }else{
+
             }
         }
     }

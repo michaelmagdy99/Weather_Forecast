@@ -1,14 +1,332 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".settings.SettingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Settings"
+        android:textColor="@color/black"
+        android:fontFamily="monospace"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/location_tv"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/white"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:background="@drawable/text_view_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+       />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/location_card_view"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/location_tv"
+        app:layout_constraintStart_toStartOf="@+id/location_tv"
+        app:layout_constraintEnd_toEndOf="@+id/location_tv"
+        app:cardElevation="5dp"
+        app:contentPaddingBottom="0dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardBackgroundColor="#F4EFEF"
+        app:cardCornerRadius="15dp"
+        android:layout_margin="8dp"
+        app:strokeWidth="0.5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <RadioGroup
+                android:id="@+id/location_radio_group"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/radio_gps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GPS"/>
+
+                <RadioButton
+                    android:id="@+id/radio_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Map"/>
+            </RadioGroup>
+
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/language_tv"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="Language"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/white"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:background="@drawable/text_view_background"
+        app:layout_constraintTop_toTopOf="@+id/location_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/language_card_view"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/language_tv"
+        app:layout_constraintStart_toStartOf="@+id/language_tv"
+        app:layout_constraintEnd_toEndOf="@+id/language_tv"
+        app:cardElevation="5dp"
+        app:contentPaddingBottom="0dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardBackgroundColor="#F4EFEF"
+        app:cardCornerRadius="15dp"
+        android:layout_margin="8dp"
+        app:strokeWidth="0.5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <RadioGroup
+                android:id="@+id/language_radio_group"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_english"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="English"/>
+
+            <RadioButton
+                android:id="@+id/radio_arabic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Arabic"/>
+            </RadioGroup>
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <TextView
+        android:id="@+id/temperature_tv"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="Temperature"
+        android:layout_margin="16dp"
+        android:textColor="@color/white"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:background="@drawable/text_view_background"
+        app:layout_constraintTop_toBottomOf="@+id/location_card_view"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/temperature_card_view"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/temperature_tv"
+        app:layout_constraintStart_toStartOf="@+id/temperature_tv"
+        app:layout_constraintEnd_toEndOf="@+id/temperature_tv"
+        app:cardElevation="5dp"
+        app:contentPaddingBottom="0dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardBackgroundColor="#F4EFEF"
+        app:cardCornerRadius="15dp"
+        android:layout_margin="8dp"
+        app:strokeWidth="0.5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <RadioGroup
+                android:id="@+id/temp_radio_group"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_celsius"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Celsius"/>
+
+            <RadioButton
+                android:id="@+id/radio_kelvin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kelvin"/>
+
+            <RadioButton
+                android:id="@+id/radio_fahrenheit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fahrenheit"/>
+            </RadioGroup>
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <TextView
+        android:id="@+id/wind_speed_tv"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="Wind Speed"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/white"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:background="@drawable/text_view_background"
+        app:layout_constraintTop_toTopOf="@+id/temperature_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/wind_card_view"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/wind_speed_tv"
+        app:layout_constraintStart_toStartOf="@+id/wind_speed_tv"
+        app:layout_constraintEnd_toEndOf="@+id/wind_speed_tv"
+        app:cardElevation="5dp"
+        app:contentPaddingBottom="0dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardBackgroundColor="#F4EFEF"
+        app:cardCornerRadius="15dp"
+        android:layout_margin="8dp"
+        app:strokeWidth="0.5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <RadioGroup
+                android:id="@+id/wind_radio_group"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_meter_sec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Meter / sec"/>
+
+            <RadioButton
+                android:id="@+id/radio_mile_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mile / Hour"/>
+            </RadioGroup>
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/notification_tv"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="Notification"
+        android:layout_margin="16dp"
+        android:textColor="@color/white"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:background="@drawable/text_view_background"
+        app:layout_constraintTop_toBottomOf="@id/temperature_card_view"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/notification_card_view"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/notification_tv"
+        app:layout_constraintStart_toStartOf="@+id/notification_tv"
+        app:layout_constraintEnd_toEndOf="@+id/notification_tv"
+        app:cardElevation="5dp"
+        app:contentPaddingBottom="0dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardBackgroundColor="#F4EFEF"
+        app:cardCornerRadius="15dp"
+        android:layout_margin="8dp"
+        app:strokeWidth="0.5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <RadioGroup
+                android:id="@+id/notifiaction_radio_group"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_enable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enable"/>
+
+            <RadioButton
+                android:id="@+id/radio_disable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Disable"/>
+            </RadioGroup>
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
