@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.HourlyItemBinding
 import com.example.weatherforecast.model.dto.HourlyItem
@@ -14,7 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class HourlyAdapter: ListAdapter<HourlyItem, HourlyAdapter.HourlyViewHolder>(HourlyDiffUtil()) {
+class HourlyAdapter(private val context: Context): ListAdapter<HourlyItem, HourlyAdapter.HourlyViewHolder>(HourlyDiffUtil()) {
     class HourlyViewHolder(val hourlyItemBinding: HourlyItemBinding) : RecyclerView.ViewHolder(hourlyItemBinding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyViewHolder {
@@ -30,9 +31,15 @@ class HourlyAdapter: ListAdapter<HourlyItem, HourlyAdapter.HourlyViewHolder>(Hou
 
         holder.hourlyItemBinding.textHour.text = Formatter.getFormattedHour(current.dt?.toLong()) ?: "00:00"
 
-        holder.hourlyItemBinding.tempImage.setImageResource(R.drawable.sunny)
-
         holder.hourlyItemBinding.textTemperature.text = "${current.temp}°C"
+
+        val image = "https://openweathermap.org/img/wn/${current.weather?.get(0)?.icon}@2x.png"
+        Glide
+            .with(context)
+            .load(image)
+            .centerCrop()
+            .placeholder(R.drawable.hum_icon)
+            .into(holder.hourlyItemBinding.tempImage)
     }
 }
 

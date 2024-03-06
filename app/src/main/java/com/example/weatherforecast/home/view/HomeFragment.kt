@@ -23,10 +23,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherforecast.databinding.FragmentHomeBinding
 import com.example.weatherforecast.home.view_model.HomeViewModel
 import com.example.weatherforecast.home.view_model.HomeViewModelFactory
+import com.example.weatherforecast.model.dto.WeatherResponse
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
 import com.example.weatherforecast.model.repository.WeatherRepository
 import com.example.weatherforecast.utilities.ApiState
 import com.example.weatherforecast.utilities.Formatter
+import com.github.matteobattilana.weather.PrecipType
+import com.github.matteobattilana.weather.WeatherData
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -36,9 +39,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+
 
 
 const val PERMISSION_ID = 3012
@@ -88,8 +89,8 @@ class HomeFragment : Fragment() {
         )
         homeViewModel = ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
 
-        dailyAdapter = DailyAdapter()
-        hourlyAdapter = HourlyAdapter()
+        dailyAdapter = DailyAdapter(requireContext())
+        hourlyAdapter = HourlyAdapter(requireContext())
 
         layoutManagerDaily = LinearLayoutManager(context)
         homeBinding.recyclerDailyWeather.layoutManager = layoutManagerDaily
@@ -104,6 +105,8 @@ class HomeFragment : Fragment() {
                 when(it){
                     is ApiState.Success -> {
                         Log.i("TAG", "onViewCreated: "+ it.weatherResponse.timezone)
+                        setWeatherDataToViews(it.weatherResponse)
+
                         homeBinding.currentData.text = Formatter.getCurrentDataAndTime()
                         homeBinding.desTemp.text = it.weatherResponse.current?.weather?.get(0)?.description ?: "UnKnow"
                         homeBinding.humitiyValue.text = (it.weatherResponse.current?.humidity ?: "0").toString()
@@ -128,6 +131,33 @@ class HomeFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun setWeatherDataToViews(weatherResponse: WeatherResponse) {
+        val description =  weatherResponse.current?.weather?.get(0)?.description ?: "UnKnow"
+        val dateTimeWithPeriod = Formatter.getCurrentPeriod()
+        val temp = weatherResponse.current?.temp?.toInt() ?: 0
+        val location =  getAddress(currentLat.toDouble(), currentLong.toDouble())
+        homeBinding.countryName.text = location
+        homeBinding.currentData.text = Formatter.getCurrentDataAndTime()
+        homeBinding.desTemp.text =description
+        homeBinding.humitiyValue.text = (weatherResponse.current?.humidity ?: "0").toString()
+        homeBinding.textView2.text = (weatherResponse.current?.windSpeed  ?: "0").toString()
+        homeBinding.pressureValue.text = (weatherResponse.current?.pressure  ?: "0").toString()
+        homeBinding.cloudValue.text = (weatherResponse.current?.clouds  ?: "0").toString()
+        homeBinding.tempValue.text = temp.toString()
+        hourlyAdapter.submitList(weatherResponse.hourly)
+        dailyAdapter.submitList(weatherResponse.daily)
+
+        val suitableBackground = Formatter.getSuitableBackground(requireContext(),
+            description,
+            dateTimeWithPeriod,
+            homeBinding.weatherView)
+
+        suitableBackground?.let {
+            homeBinding.background.background = it
+
+        }
     }
 
     private fun isLocationEnabled(): Boolean {

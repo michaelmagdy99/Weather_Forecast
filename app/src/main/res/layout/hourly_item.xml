@@ -28,8 +28,8 @@
             android:text="12:00 PM" />
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:id="@+id/temp_image"
             android:src="@drawable/sunny"
             android:layout_gravity="center"
