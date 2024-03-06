@@ -15,7 +15,7 @@ import java.util.Locale
 object Formatter {
     fun getCurrentDataAndTime(): String {
         val currentDateTime = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("EEE, dd MMM hh:mm a", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("EEE, dd MMM|hh:mm a", Locale.getDefault())
         val formattedDateTime = dateFormat.format(currentDateTime.time)
         val formattedPeriod = if (currentDateTime.get(Calendar.AM_PM) == Calendar.AM) {
             "Am"
@@ -35,10 +35,29 @@ object Formatter {
     }
 
     fun getDayOfWeek(timestamp: Long?): String {
-        val date = Date(timestamp!! * 1000)
-        val sdf = SimpleDateFormat("EEE", Locale.getDefault())
-        val dayOfWeek: String = sdf.format(date)
-        return dayOfWeek ?: ""
+        val calendar = Calendar.getInstance()
+        val today = calendar.get(Calendar.DAY_OF_YEAR)
+
+        val tomorrow = (today + 1) % calendar.getActualMaximum(Calendar.DAY_OF_YEAR)
+
+        timestamp?.let {
+            val date = Date(it * 1000)
+            val calendarDate = Calendar.getInstance()
+            calendarDate.time = date
+
+            return if (calendarDate.get(Calendar.DAY_OF_YEAR) == today) {
+                "Today"
+            }
+            else if (calendarDate.get(Calendar.DAY_OF_YEAR) == tomorrow) {
+                "Tomorrow"
+            }
+            else {
+                val sdf = SimpleDateFormat("EEEE", Locale.getDefault())
+                sdf.format(date)
+            }
+        }
+
+        return ""
     }
 
 

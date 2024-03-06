@@ -95,7 +95,8 @@ dependencies {
 
     //cardView
     implementation ("androidx.cardview:cardview:1.0.0")
-
+    //Shimmer
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
 }
 
 kapt{

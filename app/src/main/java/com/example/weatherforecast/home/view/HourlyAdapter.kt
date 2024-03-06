@@ -29,8 +29,12 @@ class HourlyAdapter(private val context: Context): ListAdapter<HourlyItem, Hourl
     override fun onBindViewHolder(holder: HourlyViewHolder, position: Int) {
         var current = getItem(position)
 
-        holder.hourlyItemBinding.textHour.text = Formatter.getFormattedHour(current.dt?.toLong()) ?: "00:00"
-
+        if (position == 0){
+            holder.hourlyItemBinding.textHour.text = "Now"
+        }else {
+            holder.hourlyItemBinding.textHour.text =
+                Formatter.getFormattedHour(current.dt?.toLong()) ?: "00:00"
+        }
         holder.hourlyItemBinding.textTemperature.text = "${current.temp}°C"
 
         val image = "https://openweathermap.org/img/wn/${current.weather?.get(0)?.icon}@2x.png"
