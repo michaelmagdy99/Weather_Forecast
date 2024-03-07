@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherforecast.databinding.FragmentHomeBinding
 import com.example.weatherforecast.home.view_model.HomeViewModel
 import com.example.weatherforecast.home.view_model.HomeViewModelFactory
+import com.example.weatherforecast.model.database.WeatherLocalDataSource
 import com.example.weatherforecast.model.dto.WeatherResponse
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
 import com.example.weatherforecast.model.repository.WeatherRepository
@@ -51,10 +52,12 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         homeViewModelFactory = HomeViewModelFactory(
             WeatherRepository.getInstance(
-                WeatherRemoteDataSource.getInstance()//,
-               // WeatherLocalDataSource.getInstance(requireContext())
+                WeatherRemoteDataSource.getInstance(),
+                WeatherLocalDataSource.getInstance(requireContext())
             ),requireContext()
         )
         homeViewModel = ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
@@ -74,19 +77,8 @@ class HomeFragment : Fragment() {
             homeViewModel.weatherStateFlow.collectLatest {
                 when(it){
                     is ApiState.Success -> {
-                        Log.i("TAG", "onViewCreated: "+ it.weatherResponse.timezone)
-                        setWeatherDataToViews(it.weatherResponse)
-
-                        homeBinding.currentData.text = Formatter.getCurrentDataAndTime()
-                        homeBinding.desTemp.text = it.weatherResponse.current?.weather?.get(0)?.description ?: "UnKnow"
-                        homeBinding.humitiyValue.text = (it.weatherResponse.current?.humidity ?: "0").toString()
-                        homeBinding.textView2.text = (it.weatherResponse.current?.windSpeed  ?: "0").toString()
-                        homeBinding.pressureValue.text = (it.weatherResponse.current?.pressure  ?: "0").toString()
-                        homeBinding.cloudValue.text = (it.weatherResponse.current?.clouds  ?: "0").toString()
-                        homeBinding.tempValue.text = "%.0f".format(it.weatherResponse.current?.temp) ?: "0"
-                        hourlyAdapter.submitList(it.weatherResponse.hourly)
-                        dailyAdapter.submitList(it.weatherResponse.daily)
-
+                        Log.i("TAG", "onViewCreated: "+ it.data.timezone)
+                        setWeatherDataToViews(it.data)
                     }
                     is ApiState.Failed ->{
                         Log.i("TAG", "onViewCreated: failed" + it.msg.toString())

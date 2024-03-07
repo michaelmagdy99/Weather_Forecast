@@ -19,15 +19,27 @@
         android:id="@+id/map"
         android:name="com.example.weatherforecast.map.MapFragment"
         android:label="@string/map"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_map_to_favourite"
+            app:destination="@id/favourite" />
+    </fragment>
     <fragment
         android:id="@+id/favourite"
-        android:name="com.example.weatherforecast.favourite.FavouriteFragment"
+        android:name="com.example.weatherforecast.favourite.view.FavouriteFragment"
         android:label="@string/favourite"
-        tools:layout="@layout/fragment_favourite" />
+        tools:layout="@layout/fragment_favourite" >
+        <action
+            android:id="@+id/action_favourite_to_map"
+            app:destination="@id/map" />
+    </fragment>
     <fragment
         android:id="@+id/settings"
         android:name="com.example.weatherforecast.settings.SettingsFragment"
         android:label="@string/settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settings_to_map"
+            app:destination="@id/map" />
+    </fragment>
 </navigation>

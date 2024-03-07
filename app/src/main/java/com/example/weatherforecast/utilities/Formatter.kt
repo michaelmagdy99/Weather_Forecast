@@ -2,6 +2,7 @@ package com.example.weatherforecast.utilities
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.location.Geocoder
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import com.example.weatherforecast.R
 import com.github.matteobattilana.weather.PrecipType

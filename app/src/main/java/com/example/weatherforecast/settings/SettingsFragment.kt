@@ -11,16 +11,20 @@ import com.example.weatherforecast.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
 
-    lateinit var settingsBinding: FragmentSettingsBinding
-
+    private lateinit var settingsBinding: FragmentSettingsBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         settingsBinding = FragmentSettingsBinding.inflate(inflater,container,false)
+        return settingsBinding.root
+    }
 
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    
+
     }
 
 }

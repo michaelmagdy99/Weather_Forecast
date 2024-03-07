@@ -1,6 +1,8 @@
 package com.example.weatherforecast.model.database
 
 import android.content.Context
+import com.example.weatherforecast.model.dto.FaviourateLocationDto
+import kotlinx.coroutines.flow.Flow
 
 class WeatherLocalDataSource private constructor(private val dao: WeatherDao): IWeatherLocalDataSource{
 
@@ -17,4 +19,18 @@ class WeatherLocalDataSource private constructor(private val dao: WeatherDao): I
             }
         }
     }
+
+    override suspend fun insertLocation(location: FaviourateLocationDto) {
+        dao.insertLocation(location)
+    }
+
+    override suspend fun deleteProduct(location: FaviourateLocationDto) {
+        dao.delete(location)
+    }
+
+    override suspend fun getAllProducts(): Flow<List<FaviourateLocationDto>> {
+        return dao.getAllLocation()
+    }
+
+
 }

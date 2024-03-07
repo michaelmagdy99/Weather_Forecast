@@ -1,9 +1,7 @@
 package com.example.weatherforecast.utilities
 
-import com.example.weatherforecast.model.dto.WeatherResponse
-
-sealed class ApiState {
-    class Success(val weatherResponse: WeatherResponse) : ApiState()
-    class Failed(val msg : Throwable): ApiState()
-    object Loading:ApiState()
+sealed class ApiState<T> {
+    class Success<T>(val data: T) : ApiState<T>()
+    class Failed<T>(val msg: Throwable) : ApiState<T>()
+    class Loading<T> : ApiState<T>()
 }

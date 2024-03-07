@@ -1,12 +1,27 @@
 package com.example.weatherforecast.map
 
+import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentMapBinding
+import com.example.weatherforecast.favourite.view_model.FavouriteViewModel
+import com.example.weatherforecast.favourite.view_model.FavouriteViewModelFactory
+import com.example.weatherforecast.home.view_model.HomeViewModel
+import com.example.weatherforecast.home.view_model.HomeViewModelFactory
+import com.example.weatherforecast.model.database.WeatherLocalDataSource
+import com.example.weatherforecast.model.dto.FaviourateLocationDto
+import com.example.weatherforecast.model.dto.LocationKey
+import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
+import com.example.weatherforecast.model.repository.WeatherRepository
 import com.example.weatherforecast.utilities.SharedPreferencesHelper
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -15,18 +30,40 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-class MapFragment : Fragment() , OnMapReadyCallback {
+class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
-    lateinit var mapBinding: FragmentMapBinding
+    private lateinit var mapBinding: FragmentMapBinding
     private lateinit var googleMap: GoogleMap
+
+    private lateinit var favViewModel: FavouriteViewModel
+    private lateinit var favViewModelFactory: FavouriteViewModelFactory
+
+    var latitude = 0.0
+    var longitude = 0.0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         mapBinding = FragmentMapBinding.inflate(inflater, container, false)
         mapBinding.map.onCreate(savedInstanceState)
+        mapBinding.cardLocation.visibility = View.GONE
         mapBinding.map.getMapAsync(this)
+
+
+        favViewModelFactory = FavouriteViewModelFactory(
+            WeatherRepository.getInstance(
+                WeatherRemoteDataSource.getInstance(),
+                WeatherLocalDataSource.getInstance(requireContext())
+            )
+        )
+        favViewModel = ViewModelProvider(this, favViewModelFactory).get(FavouriteViewModel::class.java)
+
+
+        mapBinding.saveBtnLocation.setOnClickListener {
+           favViewModel.insertProduct(FaviourateLocationDto(LocationKey(latitude,longitude),getAddress(latitude,longitude),"0.0"))
+            Navigation.findNavController(it).navigate(R.id.action_map_to_favourite)
+        }
+
         return mapBinding.root
     }
 
@@ -44,13 +81,34 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         super.onDestroy()
         mapBinding.map.onDestroy()
     }
+
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
-        val lat = SharedPreferencesHelper.getInstance(requireContext()).loadData("latitude")?.toDouble() ?: 0.0
-        val lon = SharedPreferencesHelper.getInstance(requireContext()).loadData("longitude")?.toDouble() ?: 0.0
-        val currentLocation = LatLng(lat, lon)
-        googleMap.addMarker(MarkerOptions().position(currentLocation).title("Your Location"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
+        googleMap.setOnMapClickListener(this)
     }
 
+    override fun onMapClick(latLng: LatLng) {
+        mapBinding.cardLocation.visibility = View.VISIBLE
+        googleMap.clear()
+        googleMap.addMarker(MarkerOptions().position(latLng).title("Selected Location"))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+
+        latitude = latLng.latitude
+        longitude = latLng.longitude
+
+        val latitudeStr = String.format("%.6f", latitude)
+        val longitudeStr = String.format("%.6f", longitude)
+
+        mapBinding.locationName.text = getAddress(latitude,longitude)
+        mapBinding.locationLat.text = "$latitudeStr ,  $longitudeStr"
+
+        Log.i("TAG", "onMapClick: $latitudeStr $longitudeStr")
+
+    }
+
+    fun getAddress(lat: Double, lon: Double): String {
+        val geocoder = Geocoder(requireContext())
+        val list = geocoder.getFromLocation(lat, lon, 1)
+        return list?.get(0)?.countryName + ", "+ list?.get(0)?.adminArea ?: "UnKnown"
+    }
 }
