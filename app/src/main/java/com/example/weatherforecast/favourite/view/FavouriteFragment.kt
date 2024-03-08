@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -15,6 +16,7 @@ import com.example.weatherforecast.databinding.FragmentFavouriteBinding
 import com.example.weatherforecast.databinding.FragmentHomeBinding
 import com.example.weatherforecast.favourite.view_model.FavouriteViewModel
 import com.example.weatherforecast.favourite.view_model.FavouriteViewModelFactory
+import com.example.weatherforecast.home.view.HomeFragmentArgs
 import com.example.weatherforecast.home.view.HourlyAdapter
 import com.example.weatherforecast.model.database.WeatherLocalDataSource
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
@@ -54,7 +56,11 @@ class FavouriteFragment : Fragment() {
         }
 
 
-        favAdater = FavouriteAdapter(requireContext())
+        favAdater = FavouriteAdapter(requireContext()){
+            val action = FavouriteFragmentDirections.actionFavouriteToHome()
+            action.setFavLocation(it)
+            Navigation.findNavController(view).navigate(action)
+        }
 
         layoutManager = LinearLayoutManager(context)
 
@@ -65,7 +71,7 @@ class FavouriteFragment : Fragment() {
         favViewModelFactory = FavouriteViewModelFactory(
             WeatherRepository.getInstance(
                 WeatherRemoteDataSource.getInstance(),
-                WeatherLocalDataSource.getInstance(requireContext())
+                WeatherLocalDataSource.getInstance(requireContext()), requireContext()
             )
         )
         favViewModel = ViewModelProvider(this, favViewModelFactory).get(FavouriteViewModel::class.java)

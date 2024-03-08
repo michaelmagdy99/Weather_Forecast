@@ -53,14 +53,13 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener
         favViewModelFactory = FavouriteViewModelFactory(
             WeatherRepository.getInstance(
                 WeatherRemoteDataSource.getInstance(),
-                WeatherLocalDataSource.getInstance(requireContext())
-            )
-        )
+                WeatherLocalDataSource.getInstance(requireContext()),requireContext()))
         favViewModel = ViewModelProvider(this, favViewModelFactory).get(FavouriteViewModel::class.java)
 
 
         mapBinding.saveBtnLocation.setOnClickListener {
-           favViewModel.insertProduct(FaviourateLocationDto(LocationKey(latitude,longitude),getAddress(latitude,longitude),"0.0"))
+           favViewModel.insertProduct(FaviourateLocationDto(LocationKey(latitude,longitude)
+               ,getAddress(latitude,longitude),"0"))
             Navigation.findNavController(it).navigate(R.id.action_map_to_favourite)
         }
 

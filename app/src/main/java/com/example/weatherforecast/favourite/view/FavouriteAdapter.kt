@@ -15,7 +15,7 @@ import com.example.weatherforecast.model.dto.DailyItem
 import com.example.weatherforecast.model.dto.FaviourateLocationDto
 import com.example.weatherforecast.utilities.Formatter
 
-class FavouriteAdapter(val context: Context): ListAdapter<FaviourateLocationDto, FavouriteAdapter.FavViewHolder>(FavDiffUtil()) {
+class FavouriteAdapter(val context: Context, private val onClick : (FaviourateLocationDto) -> Unit): ListAdapter<FaviourateLocationDto, FavouriteAdapter.FavViewHolder>(FavDiffUtil()) {
     class FavViewHolder(val favItemBinding: FavItemBinding) : RecyclerView.ViewHolder(favItemBinding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavViewHolder {
@@ -36,8 +36,12 @@ class FavouriteAdapter(val context: Context): ListAdapter<FaviourateLocationDto,
         holder.favItemBinding.locationLat.text =
             "${String.format("%.2f", current.locationKey.lat)}, ${String.format("%.2f", current.locationKey.long)}"
 
+
         holder.favItemBinding.tempFav.text ="${current.temp} °C"
 
+        holder.favItemBinding.cardLocation.setOnClickListener {
+            onClick(current)
+        }
     }
 }
 

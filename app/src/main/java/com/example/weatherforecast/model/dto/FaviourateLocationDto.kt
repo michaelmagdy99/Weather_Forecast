@@ -10,7 +10,7 @@ data class FaviourateLocationDto(
      @PrimaryKey val locationKey: LocationKey,
      val countryName: String,
      val temp: String
-)
+):Serializable
 
 data class LocationKey(
      val lat: Double,

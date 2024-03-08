@@ -24,11 +24,11 @@ class WeatherLocalDataSource private constructor(private val dao: WeatherDao): I
         dao.insertLocation(location)
     }
 
-    override suspend fun deleteProduct(location: FaviourateLocationDto) {
+    override suspend fun deleteLocation(location: FaviourateLocationDto) {
         dao.delete(location)
     }
 
-    override suspend fun getAllProducts(): Flow<List<FaviourateLocationDto>> {
+    override suspend fun getAllLocation(): Flow<List<FaviourateLocationDto>> {
         return dao.getAllLocation()
     }
 

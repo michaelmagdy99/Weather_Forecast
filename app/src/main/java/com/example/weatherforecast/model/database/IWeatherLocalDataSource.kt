@@ -7,7 +7,7 @@ interface IWeatherLocalDataSource {
 
    suspend fun insertLocation(location: FaviourateLocationDto)
 
-    suspend fun deleteProduct(location: FaviourateLocationDto)
+    suspend fun deleteLocation(location: FaviourateLocationDto)
 
-    suspend fun getAllProducts(): Flow<List<FaviourateLocationDto>>
+    suspend fun getAllLocation(): Flow<List<FaviourateLocationDto>>
 }

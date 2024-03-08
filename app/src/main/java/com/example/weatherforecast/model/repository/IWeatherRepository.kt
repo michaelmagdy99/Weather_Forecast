@@ -5,13 +5,15 @@ import com.example.weatherforecast.model.dto.WeatherResponse
 import kotlinx.coroutines.flow.Flow
 
 interface IWeatherRepository {
-    suspend fun getCurrentWeather(lat: Double,
+    suspend fun getCurrentWeather(): Flow<WeatherResponse>
+    suspend fun getLocalAllLocation() : Flow<List<FaviourateLocationDto>>
+    suspend fun insertProduct(location: FaviourateLocationDto)
+    suspend fun deleteProduct(location: FaviourateLocationDto)
+
+    suspend fun getFavouriteWeather(lat: Double,
                                   lon: Double,
                                   lang: String,
                                   units: String): Flow<WeatherResponse>
 
 
-    suspend fun getLocalAllLocation() : Flow<List<FaviourateLocationDto>>
-    suspend fun insertProduct(location: FaviourateLocationDto)
-    suspend fun deleteProduct(location: FaviourateLocationDto)
 }

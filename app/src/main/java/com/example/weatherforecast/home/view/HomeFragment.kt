@@ -1,5 +1,6 @@
 package com.example.weatherforecast.home.view
 
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,6 +10,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentHomeBinding
 import com.example.weatherforecast.home.view_model.HomeViewModel
 import com.example.weatherforecast.home.view_model.HomeViewModelFactory
@@ -21,7 +24,6 @@ import com.example.weatherforecast.utilities.Formatter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
 
 
 const val PERMISSION_ID = 3012
@@ -39,6 +41,9 @@ class HomeFragment : Fragment() {
     private lateinit var layoutManagerDaily: LinearLayoutManager
     private lateinit var layoutManagerHourly: LinearLayoutManager
 
+
+    private var isFavourite = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,13 +57,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         homeViewModelFactory = HomeViewModelFactory(
             WeatherRepository.getInstance(
                 WeatherRemoteDataSource.getInstance(),
-                WeatherLocalDataSource.getInstance(requireContext())
-            ),requireContext()
+                WeatherLocalDataSource.getInstance(requireContext()),requireContext()
+            )
         )
         homeViewModel = ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
 
@@ -72,6 +75,17 @@ class HomeFragment : Fragment() {
 
         homeBinding.recyclerDailyWeather.adapter = dailyAdapter
         homeBinding.recyclerHourlyWeather.adapter = hourlyAdapter
+
+        val args = HomeFragmentArgs.fromBundle(requireArguments())
+        val favLocation = args.favLocation
+
+        if (favLocation!=null){
+            isFavourite = true
+            homeViewModel.getFavoriteWeather(favLocation.locationKey.lat,favLocation.locationKey.long)
+        }else{
+            isFavourite = false
+            homeViewModel.getCurrentWeather()
+        }
 
         lifecycleScope.launch(Dispatchers.Main) {
             homeViewModel.weatherStateFlow.collectLatest {
@@ -95,11 +109,21 @@ class HomeFragment : Fragment() {
 
     }
 
+
     private fun setWeatherDataToViews(weatherResponse: WeatherResponse) {
         val description =  weatherResponse.current?.weather?.get(0)?.description ?: "UnKnow"
-        val dateTimeWithPeriod = Formatter.getCurrentPeriod()
         val temp = weatherResponse.current?.temp?.toInt() ?: 0
-        homeBinding.currentData.text = Formatter.getCurrentDataAndTime()
+
+        val imageUrl = "https://openweathermap.org/img/wn/${weatherResponse.current?.weather?.get(0)?.icon}@2x.png"
+        Glide
+            .with(requireContext())
+            .load(imageUrl)
+            .centerCrop()
+            .placeholder(R.drawable.hum_icon)
+            .into(homeBinding.tempImageDes)
+
+        homeBinding.currentData.text = Formatter.getCurrentDataAndTimeFromUnix(weatherResponse.current?.dt)
+        homeBinding.countryName.text = getAddress(weatherResponse.lat!!.toDouble(), weatherResponse.lon!!.toDouble())
         homeBinding.desTemp.text =description
         homeBinding.humitiyValue.text = (weatherResponse.current?.humidity ?: "0").toString()
         homeBinding.textView2.text = (weatherResponse.current?.windSpeed  ?: "0").toString()
@@ -114,10 +138,24 @@ class HomeFragment : Fragment() {
                 homeBinding.countryName.text = address
             }
         }
-        val suitableBackground = Formatter.getSuitableBackground(requireContext(),
+
+        val (sunriseTime, sunsetTime) = Formatter.getSunriseAndSunset(
+            (weatherResponse.current?.sunrise ?: 0) * 1000L,
+            (weatherResponse.current?.sunset ?: 0) * 1000L
+        )
+
+        val currentTimePeriod = if (System.currentTimeMillis().toString() in sunriseTime..sunsetTime) {
+            "AM"
+        } else {
+            "PM"
+        }
+
+        val suitableBackground = Formatter.getSuitableBackground(
+            requireContext(),
             description,
-            dateTimeWithPeriod,
-            homeBinding.weatherView)
+            currentTimePeriod,
+            homeBinding.weatherView
+        )
 
         suitableBackground?.let {
             homeBinding.background.background = it
@@ -125,5 +163,10 @@ class HomeFragment : Fragment() {
         }
     }
 
+    fun getAddress(lat: Double, lon: Double): String {
+        val geocoder = Geocoder(requireContext())
+        val list = geocoder.getFromLocation(lat, lon, 1)
+        return list?.get(0)?.countryName + ", "+ list?.get(0)?.adminArea ?: "UnKnown"
+    }
 
 }
