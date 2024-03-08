@@ -1,6 +1,6 @@
 package com.example.weatherforecast
 
-import com.example.weatherforecast.utilities.SharedPreferencesHelper
+import com.example.weatherforecast.sharedprefernces.SharedPreferencesHelper
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
@@ -21,6 +21,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.example.weatherforecast.databinding.ActivityMainBinding
 import com.example.weatherforecast.home.view.PERMISSION_ID
+import com.example.weatherforecast.utilities.LanguageUtilts
+import com.example.weatherforecast.utilities.SettingsConstants
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -41,13 +43,17 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var sharedPreferences: SharedPreferencesHelper
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(homeActivityMainBinding.root)
 
         sharedPreferences = SharedPreferencesHelper.getInstance(this)
+        sharedPreferences.loadData()
 
+        LanguageUtilts.setAppLocale(SettingsConstants.getLang(), this)
+        
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -65,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         homeActivityMainBinding.toolbarButton.setOnClickListener {
             homeActivityMainBinding.drawerLayout.openDrawer(GravityCompat.START)
         }
+
     }
 
     override fun onResume() {
@@ -152,12 +159,13 @@ class MainActivity : AppCompatActivity() {
 
                 currentLong = lastLocation?.longitude.toString()
                 currentLat = lastLocation?.latitude.toString()
-
-                sharedPreferences.saveData("latitude", currentLat)
-                sharedPreferences.saveData("longitude", currentLong)
+                sharedPreferences.saveCurrentLocation("lat" , currentLat)
+                sharedPreferences.saveCurrentLocation("long" , currentLong)
             }
         }
     }
+
+
 
 
 }

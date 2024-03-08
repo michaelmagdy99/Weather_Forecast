@@ -11,7 +11,7 @@ data class DailyItem(
 	val clouds: Int? = null,
 	val feelsLike: FeelsLike? = null,
 	val windGust: Any? = null,
-	val dt: Int? = null,
+	val dt: Long? = null,
 	val pop: Double? = null,
 	val windDeg: Int? = null,
 	val dewPoint: Any? = null,

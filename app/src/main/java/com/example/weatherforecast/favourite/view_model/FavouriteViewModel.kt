@@ -34,15 +34,14 @@ class FavouriteViewModel(
 
     fun deleteLocation(location: FaviourateLocationDto) {
         viewModelScope.launch(Dispatchers.IO) {
-            iWeatherRepo.deleteProduct(location)
+            iWeatherRepo.deleteLocation(location)
             getAllProduct()
         }
     }
 
-
     fun insertLocation(location: FaviourateLocationDto) {
         viewModelScope.launch(Dispatchers.IO) {
-            iWeatherRepo.insertProduct(location)
+            iWeatherRepo.insertLocation(location)
         }
     }
 }

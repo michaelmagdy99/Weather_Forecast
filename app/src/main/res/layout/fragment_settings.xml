@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".settings.SettingsFragment">
+    tools:context=".settings.view.SettingsFragment">
 
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="Settings"
+        android:text="@string/settings"
         android:textColor="@color/black"
         android:fontFamily="monospace"
         android:textAlignment="center"
@@ -26,7 +26,7 @@
         android:id="@+id/location_tv"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="Location"
+        android:text="@string/location"
         android:layout_marginTop="100dp"
         android:layout_marginStart="16dp"
         android:textColor="@color/white"
@@ -69,13 +69,13 @@
                     android:id="@+id/radio_gps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="GPS"/>
+                    android:text="@string/gps"/>
 
                 <RadioButton
                     android:id="@+id/radio_map"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Map"/>
+                    android:text="@string/map"/>
             </RadioGroup>
 
 
@@ -87,7 +87,7 @@
         android:id="@+id/language_tv"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="Language"
+        android:text="@string/language"
         android:layout_marginEnd="16dp"
         android:textColor="@color/white"
         android:paddingHorizontal="16dp"
@@ -130,13 +130,13 @@
                 android:id="@+id/radio_english"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="English"/>
+                android:text="@string/english"/>
 
             <RadioButton
                 android:id="@+id/radio_arabic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Arabic"/>
+                android:text="@string/arabic"/>
             </RadioGroup>
         </LinearLayout>
 
@@ -148,7 +148,7 @@
         android:id="@+id/temperature_tv"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="Temperature"
+        android:text="@string/temperature"
         android:layout_margin="16dp"
         android:textColor="@color/white"
         android:paddingHorizontal="16dp"
@@ -191,19 +191,19 @@
                 android:id="@+id/radio_celsius"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Celsius"/>
+                android:text="@string/celsius"/>
 
             <RadioButton
                 android:id="@+id/radio_kelvin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Kelvin"/>
+                android:text="@string/kelvin"/>
 
             <RadioButton
                 android:id="@+id/radio_fahrenheit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fahrenheit"/>
+                android:text="@string/fahrenheit"/>
             </RadioGroup>
         </LinearLayout>
 
@@ -215,7 +215,7 @@
         android:id="@+id/wind_speed_tv"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="Wind Speed"
+        android:text="@string/wind_speed"
         android:layout_marginEnd="16dp"
         android:textColor="@color/white"
         android:paddingHorizontal="16dp"
@@ -257,13 +257,13 @@
                 android:id="@+id/radio_meter_sec"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Meter / sec"/>
+                android:text="@string/meter_sec"/>
 
             <RadioButton
                 android:id="@+id/radio_mile_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mile / Hour"/>
+                android:text="@string/mile_hour"/>
             </RadioGroup>
         </LinearLayout>
 
@@ -274,7 +274,7 @@
         android:id="@+id/notification_tv"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="Notification"
+        android:text="@string/notification"
         android:layout_margin="16dp"
         android:textColor="@color/white"
         android:paddingHorizontal="16dp"
@@ -315,18 +315,30 @@
                 android:id="@+id/radio_enable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enable"/>
+                android:text="@string/enable"/>
 
             <RadioButton
                 android:id="@+id/radio_disable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Disable"/>
+                android:text="@string/disable"/>
             </RadioGroup>
         </LinearLayout>
 
 
     </androidx.cardview.widget.CardView>
 
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/save_btn"
+        android:text="Save"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/notification_card_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

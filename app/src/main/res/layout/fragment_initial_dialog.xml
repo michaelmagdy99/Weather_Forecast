@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="31dp"
         android:layout_marginEnd="8dp"
-        android:text="Location"
+        android:text="@string/location"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/radioGroup"
@@ -64,7 +64,7 @@
             android:buttonTint="@color/white"
             android:checked="true"
             android:padding="8dp"
-            android:text="GPS"
+            android:text="@string/gps"
             android:textColor="@color/white" />
 
         <RadioButton
@@ -83,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="16dp"
-        android:text="OK"
+        android:text="@string/ok"
         android:textColor="@color/white"
         app:cornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -11,9 +11,6 @@ import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.DailyItemBinding
 import com.example.weatherforecast.model.dto.DailyItem
 import com.example.weatherforecast.utilities.Formatter
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class DailyAdapter(val context: Context):ListAdapter<DailyItem, DailyAdapter.DailyViewHolder>(DailyDiffUtil()) {
     class DailyViewHolder(val dailyItemBinding: DailyItemBinding) :RecyclerView.ViewHolder(dailyItemBinding.root)
@@ -31,7 +28,7 @@ class DailyAdapter(val context: Context):ListAdapter<DailyItem, DailyAdapter.Dai
 
         val image = "https://openweathermap.org/img/wn/${current.weather?.get(0)?.icon}@2x.png"
 
-        holder.dailyItemBinding.textDay.text = Formatter.getDayOfWeek(current.dt?.toLong())
+        holder.dailyItemBinding.textDay.text = Formatter.getDay(current.dt)
 
         Glide
             .with(context)

@@ -1,8 +1,6 @@
 package com.example.weatherforecast.model.remote
 
-import com.example.weatherforecast.model.dto.WeatherResponse
 import com.example.weatherforecast.utilities.Constants
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class WeatherRemoteDataSource private constructor(private val service: WeatherWebService) : IWeatherRemoteDataSource{

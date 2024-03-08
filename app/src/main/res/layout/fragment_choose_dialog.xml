@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
-        android:text="Home"
+        android:text="@string/home"
         android:textColor="@color/black"
         android:fontFamily="monospace"
         android:textAlignment="center"

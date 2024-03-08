@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="12dp"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
                 android:drawableStart="@drawable/location"
                 android:drawablePadding="8dp"
@@ -40,8 +40,9 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/temp_fav"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteX="80dp" />
 
             <TextView
                 android:id="@+id/location_lat"
@@ -54,21 +55,6 @@
                 android:textAlignment="center"
                 app:layout_constraintTop_toBottomOf="@+id/location_name"
                 app:layout_constraintStart_toStartOf="@+id/location_name"
-                />
-
-            <TextView
-                android:id="@+id/temp_fav"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0c"
-                android:layout_marginStart="32dp"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:textAlignment="center"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 />
 
             <ImageView

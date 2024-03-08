@@ -57,7 +57,7 @@
     </fragment>
     <fragment
         android:id="@+id/settings"
-        android:name="com.example.weatherforecast.settings.SettingsFragment"
+        android:name="com.example.weatherforecast.settings.view.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings" >
         <action

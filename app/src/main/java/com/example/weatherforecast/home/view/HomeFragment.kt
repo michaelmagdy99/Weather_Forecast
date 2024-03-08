@@ -1,6 +1,5 @@
 package com.example.weatherforecast.home.view
 
-import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -20,7 +19,11 @@ import com.example.weatherforecast.model.dto.WeatherResponse
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
 import com.example.weatherforecast.model.repository.WeatherRepository
 import com.example.weatherforecast.utilities.ApiState
+import com.example.weatherforecast.utilities.Converts
 import com.example.weatherforecast.utilities.Formatter
+import com.example.weatherforecast.utilities.LanguageUtilts
+import com.example.weatherforecast.utilities.NetworkConnection
+import com.example.weatherforecast.utilities.SettingsConstants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -29,7 +32,7 @@ import kotlinx.coroutines.launch
 const val PERMISSION_ID = 3012
 
 class HomeFragment : Fragment() {
-
+    val mode = 0
     private lateinit var homeBinding: FragmentHomeBinding
 
     private lateinit var homeViewModel: HomeViewModel
@@ -47,7 +50,7 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         homeBinding = FragmentHomeBinding.inflate(inflater, container, false)
-
+        LanguageUtilts.setAppLocale(SettingsConstants.getLang(),requireContext())
         return homeBinding.root
     }
 
@@ -78,12 +81,30 @@ class HomeFragment : Fragment() {
 
         if (favLocation!=null){
             homeViewModel.getFavoriteWeather(favLocation.locationKey.lat,favLocation.locationKey.long)
-//            homeBinding.countryName.text = getAddress(favLocation.locationKey.lat,favLocation.locationKey.long)
+//            homeBinding.countryName.text = GetLocation.getAddress(requireContext(),true)
         }else if (args.destinationDescription == "current"){
             homeViewModel.getCurrentWeather()
         }else if (args.destinationDescription == "map"){
             homeViewModel.getFavoriteWeather(favLocation?.locationKey?.lat ?: 0.0,favLocation?.locationKey?.long ?:0.0)
-//            homeBinding.countryName.text = getAddress(favLocation?.locationKey?.lat ?: 0.0,favLocation?.locationKey?.long ?:0.0)
+        }else if (args.destinationDescription == "alert"){
+
+        }
+
+
+        homeBinding.swipeContainer.setOnRefreshListener {
+            if(mode==0) {
+                if (NetworkConnection.checkConnectionState(requireActivity()))
+//                    homeViewModel.getAllFromNetwork(
+//                        requireContext(),
+//                        true,
+//                        isFavorite = false
+//                    )
+                else {
+                    homeViewModel.getCurrentWeather()
+                }
+            }else{
+                homeBinding.swipeContainer.isRefreshing=false
+            }
         }
 
         lifecycleScope.launch(Dispatchers.Main) {
@@ -136,13 +157,14 @@ class HomeFragment : Fragment() {
             .placeholder(R.drawable.hum_icon)
             .into(homeBinding.tempImageDes)
 
-        homeBinding.currentData.text = Formatter.getCurrentDataAndTimeFromUnix(weatherResponse.current?.dt)
+        homeBinding.currentData.text = Formatter.getDate(weatherResponse.current?.dt)
         homeBinding.desTemp.text =description
-        homeBinding.humitiyValue.text = (weatherResponse.current?.humidity ?: "0").toString()
-        homeBinding.textView2.text = (weatherResponse.current?.windSpeed  ?: "0").toString()
+        homeBinding.humitiyValue.text = (weatherResponse.current?.humidity ?: "0").toString() + " %"
+        homeBinding.textView2.text = (Converts.getWindSpeed(weatherResponse.current?.windSpeed) ?: "0").toString() + " "+ SettingsConstants.getWindSpeed()
         homeBinding.pressureValue.text = (weatherResponse.current?.pressure  ?: "0").toString()
         homeBinding.cloudValue.text = (weatherResponse.current?.clouds  ?: "0").toString()
-        homeBinding.tempValue.text = temp.toString()
+        homeBinding.tempValue.text = Converts.getTemperature(temp).toString()
+        homeBinding.tempMeasure.text = SettingsConstants.getTemp().toString()
         hourlyAdapter.submitList(weatherResponse.hourly)
         dailyAdapter.submitList(weatherResponse.daily)
 
@@ -174,12 +196,6 @@ class HomeFragment : Fragment() {
             homeBinding.background.background = it
 
         }
-    }
-
-    fun getAddress(lat: Double, lon: Double): String {
-        val geocoder = Geocoder(requireContext())
-        val list = geocoder.getFromLocation(lat, lon, 1)
-        return list?.get(0)?.countryName + ", "+ list?.get(0)?.adminArea ?: "UnKnown"
     }
 
 }

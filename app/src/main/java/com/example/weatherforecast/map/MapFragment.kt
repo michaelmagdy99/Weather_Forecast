@@ -7,24 +7,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentMapBinding
-import com.example.weatherforecast.dialog.ChooseDialogFragmentDirections
 import com.example.weatherforecast.favourite.view_model.FavouriteViewModel
 import com.example.weatherforecast.favourite.view_model.FavouriteViewModelFactory
-import com.example.weatherforecast.home.view.HomeFragmentArgs
-import com.example.weatherforecast.home.view_model.HomeViewModel
-import com.example.weatherforecast.home.view_model.HomeViewModelFactory
 import com.example.weatherforecast.model.database.WeatherLocalDataSource
 import com.example.weatherforecast.model.dto.FaviourateLocationDto
 import com.example.weatherforecast.model.dto.LocationKey
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
 import com.example.weatherforecast.model.repository.WeatherRepository
-import com.example.weatherforecast.utilities.SharedPreferencesHelper
+import com.example.weatherforecast.sharedprefernces.SharedPreferencesHelper
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -68,7 +62,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener
                 action.setFavLocation(FaviourateLocationDto(LocationKey(latitude,longitude)
                     ,getAddress(latitude,longitude),"0"))
                 Navigation.findNavController(requireView()).navigate(action)
-            }else{
+            }else if (fromMap == "fav"){
                 favViewModel.insertLocation(FaviourateLocationDto(LocationKey(latitude,longitude)
                     ,getAddress(latitude,longitude),"0"))
                 Navigation.findNavController(it).navigate(R.id.action_map_to_favourite)
@@ -101,7 +95,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener
     override fun onMapClick(latLng: LatLng) {
         mapBinding.cardLocation.visibility = View.VISIBLE
         googleMap.clear()
-        googleMap.addMarker(MarkerOptions().position(latLng).title("Selected Location"))
+        googleMap.addMarker(MarkerOptions().position(latLng).title("Location"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
 
         latitude = latLng.latitude
@@ -117,7 +111,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener
 
     }
 
-    fun getAddress(lat: Double, lon: Double): String {
+    private fun getAddress(lat: Double, lon: Double): String {
         val geocoder = Geocoder(requireContext())
         val list = geocoder.getFromLocation(lat, lon, 1)
         return list?.get(0)?.countryName + ", "+ list?.get(0)?.adminArea ?: "UnKnown"

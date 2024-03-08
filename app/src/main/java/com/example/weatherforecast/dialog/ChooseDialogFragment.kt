@@ -11,6 +11,7 @@ import android.widget.RadioGroup
 import androidx.navigation.Navigation
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentChooseDialogBinding
+import com.example.weatherforecast.utilities.SettingsConstants
 
 
 class ChooseDialogFragment : Fragment() {
@@ -42,12 +43,14 @@ class ChooseDialogFragment : Fragment() {
 
             when (selectedOptionId) {
                 R.id.radio_gps -> {
+                    SettingsConstants.location = SettingsConstants.Location.GPS
                     val action = ChooseDialogFragmentDirections.actionChooseDialogFragmentToHome()
                     action.setDestinationDescription("current")
                     Navigation.findNavController(requireView()).navigate(action)
                 }
 
                 R.id.radio_maps -> {
+                    SettingsConstants.location = SettingsConstants.Location.MAP
                     val action = ChooseDialogFragmentDirections.actionChooseDialogFragmentToMap()
                     action.setFrom("map")
                     Navigation.findNavController(requireView()).navigate(action)                }

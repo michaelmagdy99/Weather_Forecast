@@ -30,7 +30,7 @@ class HourlyAdapter(private val context: Context): ListAdapter<HourlyItem, Hourl
         var current = getItem(position)
 
         if (position == 0){
-            holder.hourlyItemBinding.textHour.text = "Now"
+            holder.hourlyItemBinding.textHour.text = context.getString(R.string.now)
         }else {
             holder.hourlyItemBinding.textHour.text =
                 Formatter.getFormattedHour(current.dt?.toLong()) ?: "00:00"

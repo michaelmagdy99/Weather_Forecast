@@ -6,19 +6,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentFavouriteBinding
-import com.example.weatherforecast.databinding.FragmentHomeBinding
 import com.example.weatherforecast.favourite.view_model.FavouriteViewModel
 import com.example.weatherforecast.favourite.view_model.FavouriteViewModelFactory
-import com.example.weatherforecast.home.view.HomeFragmentArgs
-import com.example.weatherforecast.home.view.HourlyAdapter
+import com.example.weatherforecast.map.MapFragmentDirections
 import com.example.weatherforecast.model.database.WeatherLocalDataSource
+import com.example.weatherforecast.model.dto.FaviourateLocationDto
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
 import com.example.weatherforecast.model.repository.WeatherRepository
 import com.example.weatherforecast.utilities.ApiState
@@ -34,7 +34,7 @@ class FavouriteFragment : Fragment() {
     private lateinit var favViewModel: FavouriteViewModel
     private lateinit var favViewModelFactory: FavouriteViewModelFactory
 
-    private lateinit var favAdater : FavouriteAdapter
+    private lateinit var favAdater: FavouriteAdapter
     private lateinit var layoutManager: LinearLayoutManager
 
     override fun onCreateView(
@@ -49,14 +49,14 @@ class FavouriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         favouriteBinding.fabAddPlace.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_favourite_to_map)
+            val action = FavouriteFragmentDirections.actionFavouriteToMap()
+            action.setFrom("fav")
+            Navigation.findNavController(view).navigate(action)
         }
 
 
-        favAdater = FavouriteAdapter(requireContext()){
+        favAdater = FavouriteAdapter(requireContext()) {
             val action = FavouriteFragmentDirections.actionFavouriteToHome()
             action.setFavLocation(it)
             Navigation.findNavController(view).navigate(action)
@@ -74,34 +74,67 @@ class FavouriteFragment : Fragment() {
                 WeatherLocalDataSource.getInstance(requireContext()), requireContext()
             )
         )
-        favViewModel = ViewModelProvider(this, favViewModelFactory).get(FavouriteViewModel::class.java)
+        favViewModel =
+            ViewModelProvider(this, favViewModelFactory).get(FavouriteViewModel::class.java)
 
         lifecycleScope.launch(Dispatchers.Main) {
-            favViewModel.locationList.collectLatest{
-                when(it){
+            favViewModel.locationList.collectLatest {
+                when (it) {
                     is ApiState.Success -> {
-                        favouriteBinding.favRc.visibility = View.VISIBLE
-                        favouriteBinding.emptyFav.visibility = View.GONE
-                        favouriteBinding.noPlaceTv.visibility = View.GONE
-                        favAdater.submitList(it.data)
+                        if (it.data.isEmpty()){
+                            favouriteBinding.favRc.visibility = View.GONE
+                            favouriteBinding.emptyFav.visibility = View.VISIBLE
+                            favouriteBinding.noPlaceTv.visibility = View.VISIBLE
+                        }else{
+                            favouriteBinding.favRc.visibility = View.VISIBLE
+                            favouriteBinding.emptyFav.visibility = View.GONE
+                            favouriteBinding.noPlaceTv.visibility = View.GONE
+                            favAdater.submitList(it.data)
+                        }
                     }
-                    is ApiState.Failed ->{
+
+                    is ApiState.Failed -> {
                         favouriteBinding.favRc.visibility = View.GONE
                         favouriteBinding.emptyFav.visibility = View.VISIBLE
                         favouriteBinding.noPlaceTv.visibility = View.VISIBLE
                     }
-                    is ApiState.Loading ->{
+
+                    is ApiState.Loading -> {
                         Log.i("TAG", "onViewCreated: loading")
                         favouriteBinding.favRc.visibility = View.GONE
                         favouriteBinding.emptyFav.visibility = View.VISIBLE
                         favouriteBinding.noPlaceTv.visibility = View.VISIBLE
                     }
+
                     else -> {
                         Log.i("TAG", "onViewCreated: else")
                     }
                 }
-               }
             }
         }
 
- }
+
+        val itemTouchHelper = ItemTouchHelper(
+            object : ItemTouchHelper.SimpleCallback(
+                0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+            ) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.adapterPosition
+                    val location = favAdater.currentList[position]
+                    favViewModel.deleteLocation(location)
+                }
+            }
+        )
+        itemTouchHelper.attachToRecyclerView(favouriteBinding.favRc)
+
+    }
+}
+

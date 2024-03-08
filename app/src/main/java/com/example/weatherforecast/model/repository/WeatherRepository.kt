@@ -5,7 +5,8 @@ import com.example.weatherforecast.model.database.WeatherLocalDataSource
 import com.example.weatherforecast.model.dto.FaviourateLocationDto
 import com.example.weatherforecast.model.dto.WeatherResponse
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
-import com.example.weatherforecast.utilities.SharedPreferencesHelper
+import com.example.weatherforecast.utilities.SettingsConstants
+import com.example.weatherforecast.sharedprefernces.SharedPreferencesHelper
 import kotlinx.coroutines.flow.Flow
 
 class WeatherRepository (
@@ -29,20 +30,22 @@ class WeatherRepository (
         }
     }
     override suspend fun getCurrentWeather(): Flow<WeatherResponse> {
-        val lat = SharedPreferencesHelper.getInstance(context).loadData("latitude")?.toDouble() ?: 0.0
-        val lon = SharedPreferencesHelper.getInstance(context).loadData("longitude")?.toDouble() ?: 0.0
-        return weatherRemoteDataSource.getCurrentWeather(lat,lon,"en","metric")
+        val lat = SharedPreferencesHelper.getInstance(context).loadCurrentLocation("lat")?.toDouble()?:0.0
+        val long = SharedPreferencesHelper.getInstance(context).loadCurrentLocation("long")?.toDouble() ?:0.0
+        val lang = SettingsConstants.getLang()
+        val unit = "metric"
+        return weatherRemoteDataSource.getCurrentWeather(lat, long, lang,unit)
     }
 
     override suspend fun getLocalAllLocation(): Flow<List<FaviourateLocationDto>> {
         return weatherLocalDataSource.getAllLocation()
     }
 
-    override suspend fun insertProduct(location: FaviourateLocationDto) {
+    override suspend fun insertLocation(location: FaviourateLocationDto) {
         weatherLocalDataSource.insertLocation(location)
     }
 
-    override suspend fun deleteProduct(location: FaviourateLocationDto) {
+    override suspend fun deleteLocation(location: FaviourateLocationDto) {
         weatherLocalDataSource.deleteLocation(location)
     }
 
