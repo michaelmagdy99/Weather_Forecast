@@ -1,22 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipeContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<androidx.core.widget.NestedScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:visibility="gone"
+            android:id="@+id/empty_data"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/no_permission"
+            />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:text="Home"
+            android:textColor="@color/black"
+            android:fontFamily="monospace"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/text_data_no"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="No Found Data"
+            android:textColor="@color/black"
+            android:fontFamily="monospace"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/empty_data" />
+
+
+        <androidx.core.widget.NestedScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/background"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/sunny_bg"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    >
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".home.view.HomeFragment">
-
 <!--    <ImageView-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="match_parent"-->
@@ -36,7 +89,7 @@
         android:layout_height="150dp"
         android:layout_margin="8dp"
         android:background="@android:color/transparent"
-        app:layout_constraintTop_toBottomOf="@id/down_temp"
+        app:layout_constraintTop_toBottomOf="@id/temp_value"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -289,100 +342,6 @@
 
 
 
-    <TextView
-        android:id="@+id/temp_value_down"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="9"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/down_temp"
-        app:layout_constraintTop_toBottomOf="@+id/temp_value"  />
-
-    <ImageView
-        android:id="@+id/down_temp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/arrow_down"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/temp_value"
-        app:layout_constraintTop_toBottomOf="@+id/temp_value"
-        />
-    <TextView
-        android:id="@+id/temp_view_down"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="\u00B0"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="8sp"
-        app:layout_constraintStart_toEndOf="@+id/temp_value_down"
-        app:layout_constraintTop_toBottomOf="@+id/temp_value" />
-
-    <TextView
-        android:id="@+id/temp_measure_down"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="C"
-        android:layout_marginTop="4dp"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/temp_view_down"
-        app:layout_constraintTop_toBottomOf="@+id/temp_value"  />
-
-
-    <TextView
-        android:id="@+id/temp_value_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:text="9"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/temp_measure_up"
-        app:layout_constraintTop_toBottomOf="@+id/temp_measure" />
-
-    <ImageView
-        android:id="@+id/up_temp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/arrow_up"
-        app:layout_constraintEnd_toEndOf="@+id/temp_measure"
-        app:layout_constraintTop_toBottomOf="@+id/temp_measure" />
-
-    <TextView
-        android:id="@+id/temp_view_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="\u00B0"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="8sp"
-        app:layout_constraintTop_toTopOf="@+id/temp_measure_up"
-        app:layout_constraintEnd_toStartOf="@+id/temp_measure_up"
-         />
-
-    <TextView
-        android:id="@+id/temp_measure_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:text="C"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/up_temp"
-        app:layout_constraintTop_toBottomOf="@+id/temp_measure" />
-
-
     <!-- Daily Weather RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_daily_weather"
@@ -418,5 +377,18 @@
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progress_Bar"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

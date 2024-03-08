@@ -15,7 +15,7 @@ object Formatter {
     fun getCurrentDataAndTimeFromUnix(unixSeconds: Int?): String {
         val milliseconds = unixSeconds?.times(1000L)
         val date = milliseconds?.let { Date(it) }
-        val dateFormat = SimpleDateFormat("EEE, dd MMM|hh:mm a", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("EEE, dd MMM", Locale.getDefault())
         val formattedDateTime = dateFormat.format(date)
         val formattedPeriod = if (date?.hours!! < 12) {
             "AM"
@@ -108,17 +108,17 @@ object Formatter {
             desc.equals("shower rain") -> {
                 weatherView.setWeatherData(PrecipType.RAIN)
                 if (hour.equals("PM")) {
-                    getDrawable(context,R.drawable.cloudy_bg)
+                    getDrawable(context,R.drawable.rainy_bg)
                 } else {
-                    getDrawable(context,R.drawable.cloduy_mo)
+                    getDrawable(context,R.drawable.rainy_bg)
                 }
             }
             desc.equals("rain") -> {
                 weatherView.setWeatherData(PrecipType.RAIN)
                 if (hour.equals("PM")) {
-                    getDrawable(context,R.drawable.cloudy_bg)
+                    getDrawable(context,R.drawable.rainy_bg)
                 } else {
-                    getDrawable(context,R.drawable.cloduy_mo)
+                    getDrawable(context,R.drawable.rainy_bg)
                 }
             }
             desc.equals("thunderstorm") -> {
@@ -132,17 +132,25 @@ object Formatter {
             desc.equals("snow") -> {
                 weatherView.setWeatherData(PrecipType.SNOW)
                 if (hour.equals("PM")) {
-                    getDrawable(context,R.drawable.cloudy_bg)
+                    getDrawable(context,R.drawable.snow_bg)
                 } else {
-                    getDrawable(context,R.drawable.cloduy_mo)
+                    getDrawable(context,R.drawable.snow_bg)
                 }
             }
             desc.equals("mist") -> {
                 weatherView.setWeatherData(PrecipType.CLEAR)
                 if (hour.equals("PM")) {
-                    getDrawable(context,R.drawable.cloudy_bg)
+                    getDrawable(context,R.drawable.snow_bg)
                 } else {
-                    getDrawable(context,R.drawable.cloduy_mo)
+                    getDrawable(context,R.drawable.snow_bg)
+                }
+            }
+            desc.equals("light snow") -> {
+                weatherView.setWeatherData(PrecipType.SNOW)
+                if (hour.equals("PM")) {
+                    getDrawable(context, R.drawable.snow_bg)
+                } else {
+                    getDrawable(context, R.drawable.snow_bg)
                 }
             }
             else -> null

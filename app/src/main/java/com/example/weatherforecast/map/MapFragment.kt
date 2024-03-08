@@ -13,8 +13,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentMapBinding
+import com.example.weatherforecast.dialog.ChooseDialogFragmentDirections
 import com.example.weatherforecast.favourite.view_model.FavouriteViewModel
 import com.example.weatherforecast.favourite.view_model.FavouriteViewModelFactory
+import com.example.weatherforecast.home.view.HomeFragmentArgs
 import com.example.weatherforecast.home.view_model.HomeViewModel
 import com.example.weatherforecast.home.view_model.HomeViewModelFactory
 import com.example.weatherforecast.model.database.WeatherLocalDataSource
@@ -56,11 +58,21 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener
                 WeatherLocalDataSource.getInstance(requireContext()),requireContext()))
         favViewModel = ViewModelProvider(this, favViewModelFactory).get(FavouriteViewModel::class.java)
 
+        val args = MapFragmentArgs.fromBundle(requireArguments())
+        val fromMap = args.from
 
         mapBinding.saveBtnLocation.setOnClickListener {
-           favViewModel.insertProduct(FaviourateLocationDto(LocationKey(latitude,longitude)
-               ,getAddress(latitude,longitude),"0"))
-            Navigation.findNavController(it).navigate(R.id.action_map_to_favourite)
+            if (fromMap == "map"){
+                val action = MapFragmentDirections.actionMapToHome()
+                action.setDestinationDescription("map")
+                action.setFavLocation(FaviourateLocationDto(LocationKey(latitude,longitude)
+                    ,getAddress(latitude,longitude),"0"))
+                Navigation.findNavController(requireView()).navigate(action)
+            }else{
+                favViewModel.insertLocation(FaviourateLocationDto(LocationKey(latitude,longitude)
+                    ,getAddress(latitude,longitude),"0"))
+                Navigation.findNavController(it).navigate(R.id.action_map_to_favourite)
+            }
         }
 
         return mapBinding.root

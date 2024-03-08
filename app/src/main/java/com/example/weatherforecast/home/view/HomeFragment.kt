@@ -41,9 +41,6 @@ class HomeFragment : Fragment() {
     private lateinit var layoutManagerDaily: LinearLayoutManager
     private lateinit var layoutManagerHourly: LinearLayoutManager
 
-
-    private var isFavourite = false
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -80,11 +77,13 @@ class HomeFragment : Fragment() {
         val favLocation = args.favLocation
 
         if (favLocation!=null){
-            isFavourite = true
             homeViewModel.getFavoriteWeather(favLocation.locationKey.lat,favLocation.locationKey.long)
-        }else{
-            isFavourite = false
+//            homeBinding.countryName.text = getAddress(favLocation.locationKey.lat,favLocation.locationKey.long)
+        }else if (args.destinationDescription == "current"){
             homeViewModel.getCurrentWeather()
+        }else if (args.destinationDescription == "map"){
+            homeViewModel.getFavoriteWeather(favLocation?.locationKey?.lat ?: 0.0,favLocation?.locationKey?.long ?:0.0)
+//            homeBinding.countryName.text = getAddress(favLocation?.locationKey?.lat ?: 0.0,favLocation?.locationKey?.long ?:0.0)
         }
 
         lifecycleScope.launch(Dispatchers.Main) {
@@ -93,12 +92,27 @@ class HomeFragment : Fragment() {
                     is ApiState.Success -> {
                         Log.i("TAG", "onViewCreated: "+ it.data.timezone)
                         setWeatherDataToViews(it.data)
+                        homeBinding.progressBar.visibility = View.GONE
+                        homeBinding.background.visibility = View.VISIBLE
+                        homeBinding.emptyData.visibility = View.GONE
+                        homeBinding.textDataNo.visibility = View.GONE
+                        homeBinding.home.visibility = View.GONE
                     }
-                    is ApiState.Failed ->{
+                    is ApiState.Failed -> {
                         Log.i("TAG", "onViewCreated: failed" + it.msg.toString())
+                        homeBinding.progressBar.visibility = View.GONE
+                        homeBinding.background.visibility = View.GONE
+                        homeBinding.emptyData.visibility = View.VISIBLE
+                        homeBinding.textDataNo.visibility = View.VISIBLE
+                        homeBinding.home.visibility = View.VISIBLE
                     }
-                    is ApiState.Loading ->{
+                    is ApiState.Loading -> {
                         Log.i("TAG", "onViewCreated: loading")
+                        homeBinding.background.visibility = View.GONE
+                        homeBinding.progressBar.visibility = View.VISIBLE
+                        homeBinding.emptyData.visibility = View.GONE
+                        homeBinding.textDataNo.visibility = View.GONE
+                        homeBinding.home.visibility = View.VISIBLE
                     }
                     else -> {
                         Log.i("TAG", "onViewCreated: else")
@@ -123,7 +137,6 @@ class HomeFragment : Fragment() {
             .into(homeBinding.tempImageDes)
 
         homeBinding.currentData.text = Formatter.getCurrentDataAndTimeFromUnix(weatherResponse.current?.dt)
-        homeBinding.countryName.text = getAddress(weatherResponse.lat!!.toDouble(), weatherResponse.lon!!.toDouble())
         homeBinding.desTemp.text =description
         homeBinding.humitiyValue.text = (weatherResponse.current?.humidity ?: "0").toString()
         homeBinding.textView2.text = (weatherResponse.current?.windSpeed  ?: "0").toString()
