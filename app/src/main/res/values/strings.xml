@@ -39,4 +39,5 @@
     <string name="to">To</string>
     <string name="alarm">Alarm</string>
     <string name="set_time">Set Time</string>
+    <string name="dismiss">Dismiss</string>
 </resources>
