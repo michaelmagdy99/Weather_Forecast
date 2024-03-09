@@ -11,4 +11,15 @@
     </style>
 
 
+    <style name="MyDatePickerDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorAccent">@color/background_btn</item>
+        <item name="android:textColorPrimary">@color/background_btn</item>
+    </style>
+
+    <style name="MyTimePickerDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorAccent">@color/background_btn</item>
+        <item name="android:textColorPrimary">@color/background_btn</item>
+
+    </style>
+
 </resources>

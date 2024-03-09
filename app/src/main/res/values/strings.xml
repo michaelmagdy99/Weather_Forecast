@@ -35,4 +35,8 @@
     <string name="disable">Disable</string>
     <string name="weather">Weather</string>
     <string name="now">Now</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="alarm">Alarm</string>
+    <string name="set_time">Set Time</string>
 </resources>

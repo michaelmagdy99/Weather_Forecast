@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="monospace"
+        android:text="@string/set_time"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/from_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/text_view_background"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="8dp"
+        android:text="@string/from"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/to_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/to"
+        android:layout_marginStart="40dp"
+        android:textColor="@color/white"
+        android:paddingHorizontal="40dp"
+        android:paddingVertical="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:background="@drawable/text_view_background"
+        app:layout_constraintTop_toTopOf="@+id/from_tv"
+        app:layout_constraintStart_toEndOf="@+id/from_tv"
+        />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/from_card_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/from_tv"
+        app:layout_constraintStart_toStartOf="@+id/from_tv"
+        app:layout_constraintEnd_toEndOf="@+id/from_tv"
+        app:cardElevation="5dp"
+        app:contentPaddingBottom="0dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardBackgroundColor="#F4EFEF"
+        app:cardCornerRadius="15dp"
+        android:layout_margin="8dp"
+        app:strokeWidth="0.5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <TextView
+                android:id="@+id/clock_from_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="3:52 AM"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                />
+
+            <TextView
+                android:id="@+id/date_from_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="26 Feb,2024"
+                android:textAlignment="center"
+                android:textStyle="normal"
+                android:textSize="10sp"
+                />
+
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/to_card_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/to_tv"
+        app:layout_constraintStart_toStartOf="@+id/to_tv"
+        app:layout_constraintEnd_toEndOf="@+id/to_tv"
+        app:cardElevation="5dp"
+        app:contentPaddingBottom="0dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardBackgroundColor="#F4EFEF"
+        app:cardCornerRadius="15dp"
+        android:layout_margin="8dp"
+        app:strokeWidth="0.5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/clock_to_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="3:52 AM"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                />
+
+            <TextView
+                android:id="@+id/date_to_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="26 Feb,2024"
+                android:textAlignment="center"
+                android:textStyle="normal"
+                android:textSize="10sp"
+                />
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+        <RadioGroup
+            android:id="@+id/alert_radio_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="@id/from_card_view"
+            app:layout_constraintEnd_toEndOf="@+id/to_card_view"
+            app:layout_constraintTop_toBottomOf="@+id/from_card_view"
+            >
+
+            <RadioButton
+                android:id="@+id/radio_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/alarm"
+                android:layout_marginEnd="20dp"
+                />
+
+            <RadioButton
+                android:id="@+id/radio_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/notification"/>
+        </RadioGroup>
+
+    <Button
+        android:id="@+id/save_alert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/alert_radio_group" />
+</androidx.constraintlayout.widget.ConstraintLayout>
