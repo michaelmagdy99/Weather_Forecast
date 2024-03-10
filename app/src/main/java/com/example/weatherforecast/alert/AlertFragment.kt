@@ -1,10 +1,12 @@
 package com.example.weatherforecast.alert
 
 import android.Manifest
+import android.app.AlarmManager
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -26,13 +28,15 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
+import com.example.weatherforecast.MainActivity
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentAlertBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-const val CHANNEL_ID = "3012"
+const val CHANNEL_ID = 3012
 
 const val NOTIFICATION_ID = 2006
 class AlertFragment : Fragment()  {
@@ -98,7 +102,7 @@ class AlertFragment : Fragment()  {
 
             when (selectedOptionId) {
                 R.id.radio_alarm -> {
-
+                    setAlarm()
                 }
 
                 R.id.radio_notification -> {
@@ -160,30 +164,28 @@ class AlertFragment : Fragment()  {
     }
 
     private fun sendNotification() {
-        val builder : NotificationCompat.Builder =
-            NotificationCompat.Builder(requireActivity(), CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle("El-Kaff Hena")
-            .setContentText("Wal3 Wal3")
-            .setPriority(NotificationManager.IMPORTANCE_DEFAULT)
-        with(NotificationManagerCompat.from(requireActivity()))
-        {
-            if (ActivityCompat.checkSelfPermission(
-                    requireActivity(),
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return
-            }
-            notify(NOTIFICATION_ID,builder.build())
-        }
+        val notificationManager = NotificationManagerCompat.from(requireActivity())
 
+        val intent = Intent(requireActivity(), MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        val pendingIntent = PendingIntent.getActivity(requireActivity(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        val builder = NotificationCompat.Builder(requireActivity(), CHANNEL_ID.toString())
+            .setSmallIcon(R.drawable.sunny)
+            .setContentTitle("My notification")
+            .setContentText("Hello World!")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+            notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
+
     private fun showNotificationPermissionDialog() {
         val alertDialogBuilder = AlertDialog.Builder(requireActivity())
-            .setTitle(getString(R.string.weather))
-            .setMessage(getString(R.string.mostly_cloud))
-            .setPositiveButton(getString(R.string.disable)) { dialog: DialogInterface, _: Int ->
+            .setTitle(getString(R.string.app_name))
+            .setMessage(getString(R.string.please_enable_notifications_to_receive_important_updates_and_alerts))
+            .setPositiveButton(getString(R.string.enable)) { dialog: DialogInterface, _: Int ->
                 openAppSettings()
                 dialog.dismiss()
             }
@@ -216,4 +218,41 @@ class AlertFragment : Fragment()  {
             notificationManager.createNotificationChannel(channel)
         }
     }
+
+    private fun setAlarm(){
+        val alarmSettings = getAlarmSettingsFromUser()
+
+        scheduleAlarm(alarmSettings)
+    }
+
+    private fun getAlarmSettingsFromUser(): AlarmSettings {
+        return AlarmSettings(duration = 1 * 60 * 1000, alarmType = AlarmType.NOTIFICATION)
+    }
+
+    private fun scheduleAlarm(alarmSettings: AlarmSettings) {
+        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(requireActivity(), AlarmReceiver::class.java)
+        intent.putExtra("alarm_type", alarmSettings.alarmType)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireActivity(),
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            System.currentTimeMillis() + alarmSettings.duration,
+            pendingIntent
+        )
+    }
+
+    data class AlarmSettings(val duration: Long, val alarmType: AlarmType)
+
+    enum class AlarmType {
+        NOTIFICATION,
+        SOUND
+    }
+
 }

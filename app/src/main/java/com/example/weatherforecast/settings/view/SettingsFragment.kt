@@ -68,6 +68,13 @@ class SettingsFragment : Fragment() {
                 SettingsConstants.Lang.EN
             }
 
+        SettingsConstants.location =
+            if (settingsBinding.locationRadioGroup.checkedRadioButtonId == R.id.radio_gps) {
+                SettingsConstants.Location.GPS
+            } else {
+                SettingsConstants.Location.MAP
+            }
+
         val pref = SharedPreferencesHelper(requireContext())
         pref.insertInData()
         pref.saveAsNewSetting(1)
@@ -83,27 +90,31 @@ class SettingsFragment : Fragment() {
 
     private fun initSettingsUi() {
 
-        if(SettingsConstants.getLang()=="en")
-        {
+        if(SettingsConstants.getLang()=="en") {
             settingsBinding.languageRadioGroup.check(R.id.radio_english)
         }else{
             settingsBinding.languageRadioGroup.check(R.id.radio_arabic)
-
         }
-        if(SettingsConstants.notificationState==SettingsConstants.NotificationState.OFF)
-        {
+
+        if(SettingsConstants.location==SettingsConstants.Location.GPS) {
+            settingsBinding.locationRadioGroup.check(R.id.radio_gps)
+        }else{
+            settingsBinding.locationRadioGroup.check(R.id.radio_map)
+        }
+
+        if(SettingsConstants.notificationState==SettingsConstants.NotificationState.OFF) {
             settingsBinding.notifiactionRadioGroup.check(R.id.radio_disable)
         }else{
             settingsBinding.notifiactionRadioGroup.check(R.id.radio_enable)
         }
-        if(SettingsConstants.windSpeed==SettingsConstants.WindSpeed.MILE_HOUR)
-        {
+
+        if(SettingsConstants.windSpeed==SettingsConstants.WindSpeed.MILE_HOUR) {
             settingsBinding.windRadioGroup.check(R.id.radio_mile_hour)
         }else{
             settingsBinding.windRadioGroup.check(R.id.radio_meter_sec)
         }
-        when(SettingsConstants.temperature)
-        {
+
+        when(SettingsConstants.temperature) {
             SettingsConstants.Temperature.F->{
                 settingsBinding.tempRadioGroup.check(R.id.radio_fahrenheit)
             }

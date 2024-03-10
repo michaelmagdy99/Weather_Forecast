@@ -80,14 +80,12 @@ class SharedPreferencesHelper(context: Context) {
         }else{
             SettingsConstants.WindSpeed.MILE_HOUR
         }
-        SettingsConstants.temperature =when(sharedPreferences.getInt("temperature",-1))
-        {
+        SettingsConstants.temperature =when(sharedPreferences.getInt("temperature",-1)) {
             0-> SettingsConstants.Temperature.C
             1-> SettingsConstants.Temperature.K
             else-> SettingsConstants.Temperature.F
         }
-        SettingsConstants.notificationState =if(sharedPreferences.getInt("notificationState",-1)==0)
-        {
+        SettingsConstants.notificationState =if(sharedPreferences.getInt("notificationState",-1)==0) {
             SettingsConstants.NotificationState.OFF
         }else{
             SettingsConstants.NotificationState.ON

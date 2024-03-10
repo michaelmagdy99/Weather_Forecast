@@ -101,6 +101,9 @@ dependencies {
     //refresh
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
+    //for Kotlin + workManager
+    implementation ("androidx.work:work-runtime-ktx:2.9.0")
+
 }
 
 kapt{

@@ -40,4 +40,5 @@
     <string name="alarm">Alarm</string>
     <string name="set_time">Set Time</string>
     <string name="dismiss">Dismiss</string>
+    <string name="please_enable_notifications_to_receive_important_updates_and_alerts">Please enable notifications to receive important updates and alerts.</string>
 </resources>
