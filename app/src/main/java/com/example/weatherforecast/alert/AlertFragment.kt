@@ -28,7 +28,6 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
 import com.example.weatherforecast.MainActivity
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentAlertBinding

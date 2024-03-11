@@ -34,7 +34,7 @@ class FavouriteAdapter(val context: Context,
 
         //val image = "https://openweathermap.org/img/wn/${current.weather?.get(0)?.icon}@2x.png"
 
-        holder.favItemBinding.locationName.text = current.countryName.take(10)
+        holder.favItemBinding.locationName.text = current.countryName.take(15)
 
         holder.favItemBinding.locationLat.text =
             "${String.format("%.2f", current.locationKey.lat)}, ${String.format("%.2f", current.locationKey.long)}"

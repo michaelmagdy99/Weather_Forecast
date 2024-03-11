@@ -44,6 +44,7 @@ object Formatter {
                     getDrawable(context,R.drawable.sunny_bg)
                 }
             }
+
             desc.equals("few clouds") -> {
                 weatherView.setWeatherData(PrecipType.CLEAR)
                 if (hour.equals("PM")) {
@@ -52,6 +53,7 @@ object Formatter {
                     getDrawable(context,R.drawable.cloduy_mo)
                 }
             }
+
             desc.equals("scattered clouds") -> {
                 weatherView.setWeatherData(PrecipType.CLEAR)
                 if (hour.equals("PM")) {

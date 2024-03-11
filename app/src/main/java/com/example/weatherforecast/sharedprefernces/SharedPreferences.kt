@@ -10,6 +10,7 @@ class SharedPreferencesHelper(context: Context) {
     val editor=sharedPreferences.edit()
 
 
+
     companion object {
         @Volatile
         private var instance: SharedPreferencesHelper? = null
@@ -21,8 +22,16 @@ class SharedPreferencesHelper(context: Context) {
         }
     }
 
-    fun saveCurrentLocation(key: String, value: String) {
-        editor.putString(key, value)
+    fun setDialogShown(shown: Boolean) {
+        sharedPreferences.edit().putBoolean("dialog_shown", shown).apply()
+    }
+
+    fun isDialogShown(): Boolean {
+        return sharedPreferences.getBoolean("dialog_shown", false)
+    }
+
+    fun saveCurrentLocation(key: String, value: Double?) {
+        editor.putString(key, value.toString())
         editor.apply()
     }
 
@@ -30,15 +39,13 @@ class SharedPreferencesHelper(context: Context) {
         return sharedPreferences.getString(key, null)
     }
 
-    fun insertInData()
-    {
+    fun insertInData() {
         if(SettingsConstants.location !=null)
         {
             val res=if(SettingsConstants.location == SettingsConstants.Location.GPS) 0 else 1
             editor.putInt("location",res)
         }
-        if(SettingsConstants.temperature !=null)
-        {
+        if(SettingsConstants.temperature !=null) {
             val res= when (SettingsConstants.temperature) {
                 SettingsConstants.Temperature.C -> { 0 }
                 SettingsConstants.Temperature.K -> { 1 }

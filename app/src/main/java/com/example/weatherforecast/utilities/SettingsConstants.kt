@@ -1,5 +1,11 @@
 package com.example.weatherforecast.utilities
 
+import android.content.Context
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
+import com.example.weatherforecast.R
+import com.example.weatherforecast.sharedprefernces.SharedPreferencesHelper
+
 object SettingsConstants {
     var location: Location?=Location.GPS
     var temperature: Temperature?=Temperature.C
@@ -11,8 +17,22 @@ object SettingsConstants {
     enum class Lang{AR,EN}
     enum class WindSpeed{M_S,MILE_HOUR}
     enum class NotificationState{ON,OFF}
-    fun getLang():String
-    {
+
+    fun getLocation(): Int {
+        return when (SettingsConstants.location) {
+            SettingsConstants.Location.GPS -> {
+                R.id.home
+            }
+            SettingsConstants.Location.MAP -> {
+                R.id.map
+            }
+            else -> {
+                R.id.chooseDialogFragment
+            }
+        }
+    }
+
+    fun getLang():String {
 
         if(lang==null) {
             return "en"

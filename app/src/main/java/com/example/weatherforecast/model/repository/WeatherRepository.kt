@@ -1,6 +1,7 @@
 package com.example.weatherforecast.model.repository
 
 import android.content.Context
+import android.util.Log
 import com.example.weatherforecast.model.database.WeatherLocalDataSource
 import com.example.weatherforecast.model.dto.FaviourateLocationDto
 import com.example.weatherforecast.model.dto.WeatherResponse
@@ -30,10 +31,11 @@ class WeatherRepository (
         }
     }
     override suspend fun getCurrentWeather(): Flow<WeatherResponse> {
-        val lat = SharedPreferencesHelper.getInstance(context).loadCurrentLocation("lat")?.toDouble()?:0.0
-        val long = SharedPreferencesHelper.getInstance(context).loadCurrentLocation("long")?.toDouble() ?:0.0
+        val lat = SharedPreferencesHelper.getInstance(context).loadCurrentLocation("lat")?.toDouble() ?: 29.3059751
+        val long = SharedPreferencesHelper.getInstance(context).loadCurrentLocation("long")?.toDouble() ?: 30.8549351
         val lang = SettingsConstants.getLang()
         val unit = "metric"
+        Log.i("TAG", "getCurrentWeather: " + lat + long)
         return weatherRemoteDataSource.getCurrentWeather(lat, long, lang,unit)
     }
 

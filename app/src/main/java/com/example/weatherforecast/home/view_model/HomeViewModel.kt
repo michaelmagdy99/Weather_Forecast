@@ -19,11 +19,6 @@
         private val _weatherMutableStateFlow = MutableStateFlow<ApiState<WeatherResponse>>(ApiState.Loading<WeatherResponse>())
 
         val weatherStateFlow: StateFlow<ApiState<WeatherResponse>> = _weatherMutableStateFlow
-
-        private val _addressStateFlow = MutableStateFlow<String>("")
-        val addressStateFlow: StateFlow<String> = _addressStateFlow
-
-
         fun getCurrentWeather(){
             viewModelScope.launch(Dispatchers.IO) {
                 iWeatherRepo.getCurrentWeather()
