@@ -12,8 +12,6 @@ import java.util.Date
 import java.util.Locale
 
 object Formatter {
-
-
     fun convertUnixToTime(unixSeconds: Long): String {
         val milliseconds = unixSeconds * 1000L
         val date = Date(milliseconds)
@@ -36,7 +34,7 @@ object Formatter {
 
     fun getSuitableBackground(context: Context, desc: String, hour: String, weatherView: WeatherView): Drawable? {
         return when {
-            desc.equals("clear sky") -> {
+            desc.equals("clear sky")-> {
                 weatherView.setWeatherData(PrecipType.CLEAR)
                 if (hour.equals("PM")) {
                     getDrawable(context,R.drawable.night_bg)
@@ -118,26 +116,15 @@ object Formatter {
                     getDrawable(context, R.drawable.snow_bg)
                 }
             }
-            else -> null
+            else -> getDrawable(context, R.drawable.snow_bg)
         }
     }
 
-
-    fun formatDayTime(dt: Long): String {
-        val date = Date(dt * 1000L)
-        val formatter = SimpleDateFormat("hh:mm aa", Locale(SettingsConstants.getLang()))
-        return formatter.format(date)
-    }
 
     fun getDate(dt: Int?):String {
         val date= Date(dt?.times(1000L) ?: 0)
         val formatter = SimpleDateFormat("dd-MM-yyyy", Locale(SettingsConstants.getLang()))
         return formatter.format(date)
-    }
-    fun getDateTimeAlert(dt:Long):String{
-        val date = Date(dt)
-        val sdf = SimpleDateFormat("dd-MM-yyyy hh:mm aa")
-        return sdf.format(date)
     }
 
     fun getDay(dt: Long?):String{
@@ -145,14 +132,8 @@ object Formatter {
         val formatter = SimpleDateFormat("EEEE", Locale(SettingsConstants.getLang()))
         return formatter.format(date)
     }
-    fun getHour(dt:Long):String{
-        val date= Date(dt * 1000L)
-        val sdf = SimpleDateFormat("hh aa",Locale(SettingsConstants.getLang()))
-        return sdf.format(date)
-    }
 
-    fun getWeatherImage(img : String):Int
-    {
+    fun getWeatherImage(img : String):Int {
         return when(img) {
             "01d"-> R.drawable.sunny
             "01n"-> R.drawable.clear_sky_night

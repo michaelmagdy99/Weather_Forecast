@@ -168,13 +168,6 @@ class HomeFragment : Fragment() {
         val description =  weatherResponse.current?.weather?.get(0)?.description ?: "UnKnow"
         val temp = weatherResponse.current?.temp?.toInt() ?: 0
 
-//        val imageUrl = "https://openweathermap.org/img/wn/${weatherResponse.current?.weather?.get(0)?.icon}@2x.png"
-//        Glide
-//            .with(requireContext())
-//            .load(imageUrl)
-//            .centerCrop()
-//            .placeholder(R.drawable.hum_icon)
-//            .into(homeBinding.tempImageDes)
 
 
         homeBinding.tempImageDes.setImageResource(Formatter.getWeatherImage(weatherResponse.current?.weather?.get(0)?.icon ?: "01d"))
@@ -193,8 +186,6 @@ class HomeFragment : Fragment() {
         homeBinding.tempMeasure.text = SettingsConstants.getTemp().toString()
         hourlyAdapter.submitList(weatherResponse.hourly)
         dailyAdapter.submitList(weatherResponse.daily)
-
-
 
         val (sunriseTime, sunsetTime) = Formatter.getSunriseAndSunset(
             (weatherResponse.current?.sunrise ?: 0) * 1000L,
