@@ -151,4 +151,20 @@ object Formatter {
         return sdf.format(date)
     }
 
+    fun getWeatherImage(img : String):Int
+    {
+        return when(img) {
+            "01d"-> R.drawable.sunny
+            "01n"-> R.drawable.clear_sky_night
+            "02d"-> R.drawable.cloudy_sunny
+            "02n"-> R.drawable.cloudmoon
+            "03d","03n","04d","04n"-> R.drawable.clouds
+            "09d","9n","10d","10n"-> R.drawable.rainy_new
+            "13d","13n"-> R.drawable.snow_new
+            "11d","11n"-> R.drawable.thunderstorms
+            "50d","50n"-> R.drawable.storm
+            else -> R.drawable.sunny
+        }
+    }
+
 }

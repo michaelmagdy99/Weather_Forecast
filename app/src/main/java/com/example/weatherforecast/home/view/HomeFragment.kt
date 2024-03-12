@@ -168,15 +168,21 @@ class HomeFragment : Fragment() {
         val description =  weatherResponse.current?.weather?.get(0)?.description ?: "UnKnow"
         val temp = weatherResponse.current?.temp?.toInt() ?: 0
 
-        val imageUrl = "https://openweathermap.org/img/wn/${weatherResponse.current?.weather?.get(0)?.icon}@2x.png"
-        Glide
-            .with(requireContext())
-            .load(imageUrl)
-            .centerCrop()
-            .placeholder(R.drawable.hum_icon)
-            .into(homeBinding.tempImageDes)
+//        val imageUrl = "https://openweathermap.org/img/wn/${weatherResponse.current?.weather?.get(0)?.icon}@2x.png"
+//        Glide
+//            .with(requireContext())
+//            .load(imageUrl)
+//            .centerCrop()
+//            .placeholder(R.drawable.hum_icon)
+//            .into(homeBinding.tempImageDes)
 
-        homeBinding.countryName.text = LocationUtils.getAddress(requireActivity(),weatherResponse.lat ?: 0.0, weatherResponse.lat ?: 0.0)
+
+        homeBinding.tempImageDes.setImageResource(Formatter.getWeatherImage(weatherResponse.current?.weather?.get(0)?.icon ?: "01d"))
+        val location = Location("").apply {
+            latitude = weatherResponse.lat ?: 0.0
+            longitude = weatherResponse.lon ?: 0.0
+        }
+        homeBinding.countryName.text = LocationUtils.getAddress(requireActivity(), location)
         homeBinding.currentData.text = Formatter.getDate(weatherResponse.current?.dt)
         homeBinding.desTemp.text =description
         homeBinding.humitiyValue.text = (weatherResponse.current?.humidity ?: "0").toString() + " %"

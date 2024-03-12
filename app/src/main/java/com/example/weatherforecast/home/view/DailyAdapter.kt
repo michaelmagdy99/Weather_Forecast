@@ -26,17 +26,10 @@ class DailyAdapter(val context: Context):ListAdapter<DailyItem, DailyAdapter.Dai
     override fun onBindViewHolder(holder: DailyViewHolder, position: Int) {
         var current = getItem(position)
 
-        val image = "https://openweathermap.org/img/wn/${current.weather?.get(0)?.icon}@2x.png"
 
         holder.dailyItemBinding.textDay.text = Formatter.getDay(current.dt)
 
-        Glide
-            .with(context)
-            .load(image)
-            .centerCrop()
-            .placeholder(R.drawable.hum_icon)
-            .into(holder.dailyItemBinding.imageWeather)
-
+        holder.dailyItemBinding.imageWeather.setImageResource(Formatter.getWeatherImage(current.weather?.get(0)?.icon ?: "01d"))
         holder.dailyItemBinding.textDescription.text = current.weather?.get(0)?.description
 
         holder.dailyItemBinding.textTemperature.text = "${current.temp?.min} / ${current.temp?.max}°C"

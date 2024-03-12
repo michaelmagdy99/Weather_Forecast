@@ -37,13 +37,8 @@ class HourlyAdapter(private val context: Context): ListAdapter<HourlyItem, Hourl
         }
         holder.hourlyItemBinding.textTemperature.text = "${current.temp}°C"
 
-        val image = "https://openweathermap.org/img/wn/${current.weather?.get(0)?.icon}@2x.png"
-        Glide
-            .with(context)
-            .load(image)
-            .centerCrop()
-            .placeholder(R.drawable.hum_icon)
-            .into(holder.hourlyItemBinding.tempImage)
+        holder.hourlyItemBinding.tempImage.setImageResource(Formatter.getWeatherImage(current.weather?.get(0)?.icon ?: "01d"))
+
     }
 }
 

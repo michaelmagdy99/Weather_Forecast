@@ -15,7 +15,7 @@
     <string name="pressure">Pressure</string>
     <string name="cloud">Cloud</string>
     <string name="humidity">Humidity</string>
-    <string name="wind">wind</string>
+    <string name="wind">Wind Speed</string>
     <string name="mostly_cloud">Mostly cloud</string>
     <string name="location">Location</string>
     <string name="gps">GPS</string>

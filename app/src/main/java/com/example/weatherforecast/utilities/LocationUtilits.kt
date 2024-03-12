@@ -2,15 +2,20 @@ package com.example.weatherforecast.utilities
 
 import android.content.Context
 import android.location.Geocoder
-object LocationUtils {
-    fun getAddress(context: Context, lat: Double, lon: Double): String {
-        val geocoder = Geocoder(context)
-        val list = geocoder.getFromLocation(lat, lon, 1)
+import android.location.Location
+import java.io.IOException
 
-        return if (list != null && list.isNotEmpty()) {
-            (list[0].countryName + ", " + list[0].adminArea)
-        } else {
-            "Unknown"
+object LocationUtils {
+    fun getAddress(context: Context, location: Location): String {
+        val geocoder = Geocoder(context)
+        try {
+            val list = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            if (list != null && list.isNotEmpty()) {
+                return "${list[0].locality}, ${list[0].adminArea}, ${list[0].countryName}"
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
+        return "Unknown"
     }
 }

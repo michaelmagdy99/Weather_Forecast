@@ -59,10 +59,10 @@
 
             <ImageView
                 android:id="@+id/location_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginEnd="16dp"
-                android:src="@drawable/sunny"
+                android:src="@drawable/bin"
                 android:textColor="@color/white"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
