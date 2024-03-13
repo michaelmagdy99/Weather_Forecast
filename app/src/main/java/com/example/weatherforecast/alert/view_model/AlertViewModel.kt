@@ -17,6 +17,9 @@ class AlertViewModel(private val iWeatherRepo: IWeatherRepository) : ViewModel()
     private val _alerts = MutableStateFlow<ApiState<List<Alert>>>(ApiState.Loading())
     val alerts: StateFlow<ApiState<List<Alert>>> = _alerts
 
+    init {
+        getAllAlerts()
+    }
     fun insertAlert(alert: Alert) {
         viewModelScope.launch {
             iWeatherRepo.insertAlert(alert)

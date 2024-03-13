@@ -21,7 +21,7 @@ interface IWeatherRepository {
     suspend fun deleteAlert(alert: Alert)
     fun getListOfAlerts(): Flow<List<Alert>>
 
-    fun getAlertWithId(entryId: String): Alert
+    fun getAlertWithId(entryId: String?): Alert
 
      suspend fun updateAlertItemLatLongById(id: String, lat: Double, long: Double)
 

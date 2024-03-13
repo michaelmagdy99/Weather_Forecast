@@ -12,8 +12,7 @@ import com.example.weatherforecast.favourite.view.FavouriteAdapter
 import com.example.weatherforecast.model.dto.Alert
 import com.example.weatherforecast.model.dto.FaviourateLocationDto
 
-class AlertAdapter(val context: Context,
-                   private val onClick : (Alert) -> Unit
+class AlertAdapter(private val removeClickListener: RemoveClickListener
 
 ): ListAdapter<Alert, AlertAdapter.AlertsViewHolder>(AlertsDiffUtil()) {
     class AlertsViewHolder(val alertItemBinding: AlertItemBinding ) : RecyclerView.ViewHolder(alertItemBinding.root)
@@ -29,18 +28,18 @@ class AlertAdapter(val context: Context,
     override fun onBindViewHolder(holder: AlertsViewHolder, position: Int) {
         var current = getItem(position)
 
-        holder.alertItemBinding.textViewAlertTimeFrom.text = "From : " + current.from + " | " + current.to
+        holder.alertItemBinding.textViewAlertTimeFrom.text = "From : " + current.fromDate + " | " + current.fromTime
+        holder.alertItemBinding.textViewAlertTimeTo.text = "To : " + current.toDate + " | " + current.toTime
 
         holder.alertItemBinding.imgBtnAlertItem.setOnClickListener {
-            onClick(current)
+            removeClickListener.onRemoveClick(current)
         }
 
     }
 
-    fun deleteItemAtPosition(position: Int) {
-        val newList = currentList.toMutableList()
-        newList.removeAt(position)
-        submitList(newList)
+
+    class RemoveClickListener(val removeClickListener : (Alert) -> Unit){
+        fun onRemoveClick(alertEntity: Alert) = removeClickListener(alertEntity)
     }
 }
 

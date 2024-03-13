@@ -41,4 +41,13 @@
     <string name="set_time">Set Time</string>
     <string name="dismiss">Dismiss</string>
     <string name="please_enable_notifications_to_receive_important_updates_and_alerts">Please enable notifications to receive important updates and alerts.</string>
+    <string name="the_alarm_is_not_allow_to_show">The Alarm is not allow to show</string>
+    <string name="please_allow_draw_over_apps_permission">Please allow draw over Apps Permission</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="deleted_from_alert">Deleted From Alert</string>
+    <string name="unfortunately_the_display_over_other_apps_permission_is_not_granted">Unfortunately the display over other Apps Permission</string>
+    <string name="warning">Warning</string>
+    <string name="permission_request">Permission Request</string>
+    <string name="weather_alarm">Weather Alarm</string>
 </resources>

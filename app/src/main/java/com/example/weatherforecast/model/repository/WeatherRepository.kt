@@ -81,8 +81,8 @@ class WeatherRepository (
         }
     }
 
-    override fun getAlertWithId(entryId: String): Alert{
-        return weatherLocalDataSource.getAlertWithId(entryId)
+    override fun getAlertWithId(id: String?): Alert{
+        return weatherLocalDataSource.getAlertWithId(id!!)
     }
 
 }

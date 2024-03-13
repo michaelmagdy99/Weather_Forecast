@@ -3,7 +3,7 @@ package com.example.weatherforecast.model.dto
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
+import com.example.weatherforecast.alert.work_manager.AlertType
 import java.io.Serializable
 import java.util.UUID
 
@@ -11,8 +11,9 @@ import java.util.UUID
 data class Alert(
 
     @PrimaryKey @ColumnInfo(name = "id") var id: String = UUID.randomUUID().toString(),
-    val from: Long, val to: Long,
-    val kind: String,
+    val fromDate: String, val toDate: String,
+    val toTime: String, val fromTime: String,
+    val alertType: String,
     val lon: Double,
     val lat: Double,
 
