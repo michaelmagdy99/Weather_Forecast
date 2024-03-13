@@ -10,30 +10,6 @@ import java.util.Locale
 
 object
 LanguageUtilts {
-    fun get_En_To_Ar_Numbers(number: String): String {
-        val arabicNumber = mutableListOf<String>()
-        for (element in number) {
-            when (element) {
-                '1' -> arabicNumber.add("١")
-                '2' -> arabicNumber.add("٢")
-                '3' -> arabicNumber.add("٣")
-                '4' -> arabicNumber.add("٤")
-                '5' -> arabicNumber.add("٥")
-                '6' -> arabicNumber.add("٦")
-                '7' -> arabicNumber.add("٧")
-                '8' -> arabicNumber.add("٨")
-                '9' -> arabicNumber.add("٩")
-                '0' ->arabicNumber.add("٠")
-                else -> arabicNumber.add("")
-            }
-        }
-        return arabicNumber.toString()
-            .replace("[", "")
-            .replace("]", "")
-            .replace(",", "")
-            .replace(" ", "")
-    }
-
 
     fun setAppLayoutDirections(locale:String,context: Context){
         val configuration: Configuration = context.resources.configuration

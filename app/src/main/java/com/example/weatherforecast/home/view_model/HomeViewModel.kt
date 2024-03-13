@@ -4,6 +4,7 @@
     import androidx.lifecycle.ViewModel
     import androidx.lifecycle.viewModelScope
     import com.example.weatherforecast.model.dto.WeatherResponse
+    import com.example.weatherforecast.model.repository.IWeatherRepository
     import com.example.weatherforecast.model.repository.WeatherRepository
     import com.example.weatherforecast.utilities.ApiState
     import kotlinx.coroutines.Dispatchers
@@ -13,7 +14,7 @@
     import kotlinx.coroutines.launch
 
     class HomeViewModel(
-        private val iWeatherRepo: WeatherRepository
+        private val iWeatherRepo: IWeatherRepository
     ) : ViewModel() {
 
         private val _weatherMutableStateFlow = MutableStateFlow<ApiState<WeatherResponse>>(ApiState.Loading<WeatherResponse>())

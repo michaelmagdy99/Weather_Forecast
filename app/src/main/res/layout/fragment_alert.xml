@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
+        android:id="@+id/alert_tv"
         android:text="@string/alerts"
         android:textColor="@color/black"
         android:fontFamily="monospace"
@@ -22,20 +23,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.airbnb.lottie.LottieAnimationView
+    <ImageView
         android:visibility="visible"
         android:id="@+id/empty_alert"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:src="@drawable/alarm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/no_permission"
         />
     <TextView
+        android:id="@+id/no_alert"
         android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,8 +65,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/alert_rc"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/alert_tv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

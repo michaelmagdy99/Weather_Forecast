@@ -3,6 +3,7 @@ package com.example.weatherforecast.favourite.view_model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecast.model.dto.FaviourateLocationDto
+import com.example.weatherforecast.model.repository.IWeatherRepository
 import com.example.weatherforecast.model.repository.WeatherRepository
 import com.example.weatherforecast.utilities.ApiState
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +13,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class FavouriteViewModel(
-    private val iWeatherRepo : WeatherRepository,
+    private val iWeatherRepo : IWeatherRepository,
 ) : ViewModel() {
 
     private val _locationList = MutableStateFlow<ApiState<List<FaviourateLocationDto>>>(ApiState.Loading<List<FaviourateLocationDto>>())

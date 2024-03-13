@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.weatherforecast.model.dto.Alert
 import com.example.weatherforecast.model.dto.FaviourateLocationDto
 import com.example.weatherforecast.model.dto.LocationKeyConverter
 
-@Database(entities = [FaviourateLocationDto::class], version = 1)
+@Database(entities = [FaviourateLocationDto::class, Alert::class], version = 1)
 @TypeConverters(LocationKeyConverter::class)
 abstract class WeatherDatabase : RoomDatabase(){
     abstract fun getWeather() : WeatherDao

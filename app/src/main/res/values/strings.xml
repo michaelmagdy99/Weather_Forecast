@@ -11,7 +11,7 @@
     <string name="alerts">Alerts</string>
     <string name="no_alerts">No Alerts</string>
     <string name="no_places">No Places</string>
-    <string name="no_found_data">No Found Data</string>
+    <string name="no_found_data">Data Not Found</string>
     <string name="pressure">Pressure</string>
     <string name="cloud">Cloud</string>
     <string name="humidity">Humidity</string>

@@ -1,8 +1,11 @@
 package com.example.weatherforecast.model.database
 
 import android.content.Context
+import com.example.weatherforecast.model.dto.Alert
 import com.example.weatherforecast.model.dto.FaviourateLocationDto
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 
 class WeatherLocalDataSource private constructor(private val dao: WeatherDao): IWeatherLocalDataSource{
 
@@ -33,4 +36,24 @@ class WeatherLocalDataSource private constructor(private val dao: WeatherDao): I
     }
 
 
+    override suspend fun deleteAlert(alert: Alert) {
+        dao.deleteAlert(alert)
+    }
+
+    override suspend fun insertAlert(alert: Alert) {
+        dao.insertAlert(alert)
+    }
+    override fun getListOfAlerts(): Flow<List<Alert>>{
+        return dao.getListOfAlerts()
+    }
+
+    override suspend fun updateAlertItemLatLongById(id: String, lat: Double, long: Double) {
+        withContext(Dispatchers.IO){
+            dao.updateAlertItemLatLongById(id, lat, long)
+        }
+
+    }
+    override fun getAlertWithId(entryId: String): Alert {
+        return dao.getAlertWithId(entryId)
+    }
 }
