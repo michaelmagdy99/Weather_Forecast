@@ -19,9 +19,6 @@ interface WeatherDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertLocation(location: FaviourateLocationDto)
 
-    @Query("DELETE FROM fav_table")
-    fun deleteAllProduct()
-
     @Delete
     fun delete(location: FaviourateLocationDto)
 
@@ -37,7 +34,5 @@ interface WeatherDao {
     @Query("select * from Alert where id = :id limit 1")
     fun getAlertWithId(id: String): Alert
 
-    @Query("UPDATE Alert SET lat = :lat, lon= :lon WHERE id = :id")
-    fun updateAlertItemLatLongById(id: String, lat: Double, lon: Double)
 
 }

@@ -37,7 +37,7 @@ class AlertWorker(private val appContext: Context, workerParams: WorkerParameter
 
         val repo = WeatherRepository.getInstance(
             WeatherRemoteDataSource.getInstance(),
-            WeatherLocalDataSource.getInstance(appContext), appContext
+            WeatherLocalDataSource.getInstance(appContext)
         )
 
         return withContext(Dispatchers.IO) {

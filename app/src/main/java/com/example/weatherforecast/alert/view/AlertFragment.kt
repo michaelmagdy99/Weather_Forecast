@@ -105,7 +105,7 @@ class AlertFragment : Fragment()  {
         alertViewModelFactory = AlertViewModelFactory(
             WeatherRepository.getInstance(
                 WeatherRemoteDataSource.getInstance(),
-                WeatherLocalDataSource.getInstance(requireContext()), requireContext()
+                WeatherLocalDataSource.getInstance(requireContext())
             )
         )
         alertViewModel =

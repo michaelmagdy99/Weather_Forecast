@@ -5,7 +5,19 @@
       <entry key="ExampleInstrumentedTest">
         <State />
       </entry>
+      <entry key="WeatherDoaTest">
+        <State />
+      </entry>
+      <entry key="WeatherLocalDataSourceTest">
+        <State />
+      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="deleteFavWeather()">
+        <State />
+      </entry>
+      <entry key="insertProduct()">
         <State />
       </entry>
     </value>

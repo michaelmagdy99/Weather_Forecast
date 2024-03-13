@@ -49,7 +49,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener
         favViewModelFactory = FavouriteViewModelFactory(
             WeatherRepository.getInstance(
                 WeatherRemoteDataSource.getInstance(),
-                WeatherLocalDataSource.getInstance(requireContext()),requireContext()))
+                WeatherLocalDataSource.getInstance(requireContext())))
         favViewModel = ViewModelProvider(this, favViewModelFactory).get(FavouriteViewModel::class.java)
 
         val args = MapFragmentArgs.fromBundle(requireArguments())

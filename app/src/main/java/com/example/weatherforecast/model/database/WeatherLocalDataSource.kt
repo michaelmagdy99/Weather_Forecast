@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
-class WeatherLocalDataSource private constructor(private val dao: WeatherDao): IWeatherLocalDataSource{
+class WeatherLocalDataSource(private val dao: WeatherDao): IWeatherLocalDataSource{
 
     companion object {
         private var instance: WeatherLocalDataSource? = null
@@ -47,12 +47,6 @@ class WeatherLocalDataSource private constructor(private val dao: WeatherDao): I
         return dao.getListOfAlerts()
     }
 
-    override suspend fun updateAlertItemLatLongById(id: String, lat: Double, long: Double) {
-        withContext(Dispatchers.IO){
-            dao.updateAlertItemLatLongById(id, lat, long)
-        }
-
-    }
     override fun getAlertWithId(entryId: String): Alert {
         return dao.getAlertWithId(entryId)
     }

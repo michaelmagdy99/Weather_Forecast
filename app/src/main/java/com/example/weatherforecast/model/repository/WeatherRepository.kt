@@ -1,6 +1,5 @@
 package com.example.weatherforecast.model.repository
 
-import android.content.Context
 import android.util.Log
 import com.example.weatherforecast.model.database.WeatherLocalDataSource
 import com.example.weatherforecast.model.dto.Alert
@@ -8,38 +7,31 @@ import com.example.weatherforecast.model.dto.FaviourateLocationDto
 import com.example.weatherforecast.model.dto.WeatherResponse
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
 import com.example.weatherforecast.utilities.SettingsConstants
-import com.example.weatherforecast.sharedprefernces.SharedPreferencesHelper
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
 
-class WeatherRepository (
+class WeatherRepository(
     private val weatherRemoteDataSource: WeatherRemoteDataSource,
     private val weatherLocalDataSource: WeatherLocalDataSource,
-    private val context: Context
     ) : IWeatherRepository {
 
     companion object{
         private var instance : WeatherRepository? = null
         fun getInstance(
             weatherRemoteDataSource: WeatherRemoteDataSource,
-            weatherLocalDataSource: WeatherLocalDataSource,
-            context: Context
+            weatherLocalDataSource: WeatherLocalDataSource
         ): WeatherRepository{
             return instance?: synchronized(this){
-                val temp = WeatherRepository(weatherRemoteDataSource, weatherLocalDataSource, context)
+                val temp = WeatherRepository(weatherRemoteDataSource, weatherLocalDataSource)
                 instance = temp
                 temp
             }
         }
     }
-    override suspend fun getCurrentWeather(): Flow<WeatherResponse> {
-        val lat = SharedPreferencesHelper.getInstance(context).loadCurrentLocation("lat")?.toDouble() ?: 29.3059751
-        val long = SharedPreferencesHelper.getInstance(context).loadCurrentLocation("long")?.toDouble() ?: 30.8549351
+    override suspend fun getCurrentWeather(lat: Double, lon: Double): Flow<WeatherResponse> {
         val lang = SettingsConstants.getLang()
         val unit = "metric"
-        Log.i("TAG", "getCurrentWeather: " + lat + long)
-        return weatherRemoteDataSource.getCurrentWeather(lat, long, lang,unit)
+        Log.i("TAG", "getCurrentWeather: $lat $lon")
+        return weatherRemoteDataSource.getCurrentWeather(lat, lon, lang, unit)
     }
 
     override suspend fun getLocalAllLocation(): Flow<List<FaviourateLocationDto>> {
@@ -73,12 +65,6 @@ class WeatherRepository (
 
     override fun getListOfAlerts(): Flow<List<Alert>> {
         return weatherLocalDataSource.getListOfAlerts()
-    }
-
-    override suspend fun updateAlertItemLatLongById(id: String, lat: Double, long: Double) {
-        withContext(Dispatchers.IO) {
-            weatherLocalDataSource.updateAlertItemLatLongById(id, lat, long)
-        }
     }
 
     override fun getAlertWithId(id: String?): Alert{

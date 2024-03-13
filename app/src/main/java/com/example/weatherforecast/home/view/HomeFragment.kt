@@ -61,13 +61,6 @@ class HomeFragment : Fragment() {
 
     private lateinit var layoutManagerDaily: LinearLayoutManager
     private lateinit var layoutManagerHourly: LinearLayoutManager
-
-    private var isTakeLocation : Boolean = false
-
-    lateinit var fusedClient : FusedLocationProviderClient
-    var currentLat = ""
-    var currentLong = ""
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -84,7 +77,7 @@ class HomeFragment : Fragment() {
         homeViewModelFactory = HomeViewModelFactory(
             WeatherRepository.getInstance(
                 WeatherRemoteDataSource.getInstance(),
-                WeatherLocalDataSource.getInstance(requireContext()),requireContext()
+                WeatherLocalDataSource.getInstance(requireContext())
             )
         )
         homeViewModel = ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
@@ -109,22 +102,11 @@ class HomeFragment : Fragment() {
             homeViewModel.getFavoriteWeather(favLocation?.locationKey?.lat ?: 0.0,favLocation?.locationKey?.long ?:0.0)
         }else if (args.destinationDescription == "alert"){
         }else{
-            homeViewModel.getCurrentWeather()
-            getLocation()
+            val lat = SharedPreferencesHelper.getInstance(requireActivity()).loadCurrentLocation("lat")?.toDouble() ?: 29.3059751
+            val long = SharedPreferencesHelper.getInstance(requireActivity()).loadCurrentLocation("long")?.toDouble() ?: 30.8549351
+            homeViewModel.getCurrentWeather(lat, long)
         }
 
-
-        homeBinding.swipeContainer.setOnRefreshListener {
-            if(mode==0) {
-                if (NetworkConnection.checkConnectionState(requireActivity()))
-
-                else {
-                    homeViewModel.getCurrentWeather()
-                }
-            }else{
-                homeBinding.swipeContainer.isRefreshing=false
-            }
-        }
 
         lifecycleScope.launch(Dispatchers.Main) {
             homeViewModel.weatherStateFlow.collectLatest {
@@ -211,89 +193,4 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == PERMISSION_ID){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                getLocation()
-            }else{
-
-            }
-        }
-    }
-    private fun checkPermissions(): Boolean {
-        val result = ActivityCompat.checkSelfPermission(requireActivity(),
-
-            Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(requireActivity(),
-            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-
-        return result
-    }
-
-
-    private fun isLocationEnabled(): Boolean {
-        val locationManager =  context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun getLocation(): Unit {
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {
-                requestNewLocationData()
-            } else {
-                Log.i("TAG", "Turn On Location")
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
-            }
-        } else {
-            requestPermissions()
-        }
-    }
-
-
-    private fun requestPermissions(){
-        ActivityCompat.requestPermissions(requireActivity(),
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
-            PERMISSION_ID
-        )
-    }
-
-
-    @SuppressLint("MissingPermission")
-    private fun requestNewLocationData() {
-        val locationRequest = LocationRequest()
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-        locationRequest.setInterval(0)
-        fusedClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
-        fusedClient.requestLocationUpdates(
-            locationRequest,
-            locationCallBack,
-            Looper.myLooper()
-        )
-    }
-
-
-    private val locationCallBack : LocationCallback = object : LocationCallback() {
-        override fun onLocationResult(p0: LocationResult) {
-            if (!isTakeLocation) {
-                isTakeLocation = true
-                val lastLocation: Location? = p0.lastLocation
-
-                currentLong = lastLocation?.longitude.toString()
-                currentLat = lastLocation?.latitude.toString()
-                SharedPreferencesHelper.getInstance(requireActivity()).let {
-                    it.saveCurrentLocation("lat", lastLocation?.latitude)
-                    it.saveCurrentLocation("long", lastLocation?.longitude)
-                }
-            }
-        }
-    }
 }
