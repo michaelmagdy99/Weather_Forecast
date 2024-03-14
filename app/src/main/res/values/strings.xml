@@ -45,7 +45,7 @@
     <string name="please_allow_display_apps_permission">Please allow Display other Apps Permission</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="deleted_from_alert">Deleted From Alert</string>
+    <string name="deleted_from_alert">Are You Sure delete this alarm ?</string>
     <string name="unfortunately_the_display_over_other_apps_permission_is_not_granted">Unfortunately Can not use the alarm without allow Permission</string>
     <string name="warning">Warning</string>
     <string name="permission_request">Permission Request</string>
