@@ -7,8 +7,8 @@ These Application are developed by trainee of ITI intake (44) Native Mobile Appl
 ## Overview
 
 - Displays the weather status and the temperature from your location.
-- You can pick a specific location on the map and/or search for it by auto-complete edit text and add it to a list of favorite locations get all the weather information at this location.
-- You can set an alert for rain, wind, very low or very high temperature, fog, snow … etc
+- You can pick a specific location on the map to add it to a list of favorite locations get all the weather information at this location.
+- You can set an alert for updates your current location.
 - The App Support English / Arabic Languages
 
 ## Technologies Used
