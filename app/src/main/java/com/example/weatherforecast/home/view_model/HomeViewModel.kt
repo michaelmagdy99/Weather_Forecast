@@ -25,7 +25,6 @@
                 iWeatherRepo.getCurrentWeather(lat, lon)
                     .catch { _weatherMutableStateFlow.value = ApiState.Failed(it) }
                     .collect {
-                        Log.i("TAG", "onViewCreated: " + it.timezone)
                         _weatherMutableStateFlow.value = ApiState.Success(it)
                     }
             }
@@ -33,7 +32,7 @@
 
         fun getFavoriteWeather(lat :Double, long: Double){
             viewModelScope.launch(Dispatchers.IO) {
-                iWeatherRepo.getFavouriteWeather(lat,long,"en","metric")
+                iWeatherRepo.getFavouriteWeather(lat,long)
                     .catch { _weatherMutableStateFlow.value = ApiState.Failed(it) }
                     .collect{
                         Log.i("TAG", "onViewCreated: "+ it.timezone)

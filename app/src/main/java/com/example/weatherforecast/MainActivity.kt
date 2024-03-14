@@ -21,7 +21,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.example.weatherforecast.databinding.ActivityMainBinding
 import com.example.weatherforecast.home.view.PERMISSION_ID
-import com.example.weatherforecast.utilities.LanguageUtilts
+import com.example.weatherforecast.utilities.LanguageUtils
 import com.example.weatherforecast.utilities.SettingsConstants
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         sharedPreferences = SharedPreferencesHelper.getInstance(this)
         sharedPreferences.loadData()
 
-        LanguageUtilts.setAppLocale(SettingsConstants.getLang(), this)
+        LanguageUtils.setAppLocale(SettingsConstants.getLang(), this)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment

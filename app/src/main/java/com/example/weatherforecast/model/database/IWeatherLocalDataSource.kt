@@ -10,10 +10,10 @@ interface IWeatherLocalDataSource {
 
     suspend fun deleteLocation(location: FaviourateLocationDto)
 
-    suspend fun getAllLocation(): Flow<List<FaviourateLocationDto>>
+    fun getAllLocation(): Flow<List<FaviourateLocationDto>>
 
     suspend fun insertAlert(alert: Alert)
     suspend fun deleteAlert(alert: Alert)
     fun getListOfAlerts(): Flow<List<Alert>>
-   fun getAlertWithId(entryId: String): Alert
+    fun getAlertWithId(entryId: String): Alert
 }

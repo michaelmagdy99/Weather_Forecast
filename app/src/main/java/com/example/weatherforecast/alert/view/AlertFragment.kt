@@ -322,7 +322,7 @@ class AlertFragment : Fragment()  {
     private fun checkDrawOverAppsPermissionsDialog() {
         AlertDialog.Builder(requireActivity()).setTitle(getString(R.string.permission_request))
             .setCancelable(false)
-            .setMessage(getString(R.string.please_allow_draw_over_apps_permission))
+            .setMessage(getString(R.string.please_allow_display_apps_permission))
             .setPositiveButton(
                 "Yes"
             ) { _, _ -> checkDisplayOverOtherAppPerm() }.setNegativeButton(
@@ -334,18 +334,15 @@ class AlertFragment : Fragment()  {
 
     private fun checkDeleteDialog(alert: Alert) {
         val deleteAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
-        deleteAlertDialogBuilder.setBackground(
-            ResourcesCompat.getDrawable(
-                resources, R.drawable.background_menu_drawer, requireActivity().theme
-            )
-        ).setTitle(getString(R.string.deleted_from_alert)).setCancelable(false)
-            .setPositiveButton(
-                getString(R.string.yes)
-            ) { _, _ ->
+        deleteAlertDialogBuilder
+            .setTitle(getString(R.string.deleted_from_alert))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 alertViewModel.deleteAlert(alert)
-            }.setNegativeButton(
-                getString(R.string.no)
-            ) { _, _ -> }.show()
+            }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .show()
+
     }
 
 

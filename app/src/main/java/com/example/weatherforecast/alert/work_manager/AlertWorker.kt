@@ -48,8 +48,6 @@ class AlertWorker(private val appContext: Context, workerParams: WorkerParameter
                     val weather = repo.getFavouriteWeather(
                         alert.lat,
                         alert.lon,
-                        SettingsConstants.getLang(),
-                        "metric"
                     )
 
                     weather.catch { e ->

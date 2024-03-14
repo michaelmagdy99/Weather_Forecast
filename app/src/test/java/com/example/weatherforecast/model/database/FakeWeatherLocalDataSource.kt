@@ -3,33 +3,41 @@ package com.example.weatherforecast.model.database
 import com.example.weatherforecast.model.dto.Alert
 import com.example.weatherforecast.model.dto.FaviourateLocationDto
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
-class FakeWeatherLocalDataSource : IWeatherLocalDataSource {
+class FakeWeatherLocalDataSource : IWeatherLocalDataSource  {
+
+    private val faviourateLocation : MutableList<FaviourateLocationDto> = mutableListOf()
+
+    private val alerts = mutableListOf<Alert>()
+
     override suspend fun insertLocation(location: FaviourateLocationDto) {
-        TODO("Not yet implemented")
+       if(!faviourateLocation.contains(location)){
+           faviourateLocation.add(location)
+       }
     }
 
     override suspend fun deleteLocation(location: FaviourateLocationDto) {
-        TODO("Not yet implemented")
+        faviourateLocation.remove(location)
     }
 
-    override suspend fun getAllLocation(): Flow<List<FaviourateLocationDto>> {
-        TODO("Not yet implemented")
+    override fun getAllLocation() = flow {
+        emit(faviourateLocation)
     }
 
     override suspend fun insertAlert(alert: Alert) {
-        TODO("Not yet implemented")
+        alerts.add(alert)
     }
 
     override suspend fun deleteAlert(alert: Alert) {
-        TODO("Not yet implemented")
+        alerts.remove(alert)
     }
 
-    override fun getListOfAlerts(): Flow<List<Alert>> {
-        TODO("Not yet implemented")
+    override fun getListOfAlerts()= flow {
+         emit(alerts)
     }
 
     override fun getAlertWithId(entryId: String): Alert {
-        TODO("Not yet implemented")
+        return alerts.find { it.id == entryId } ?: throw Exception("Alert not found with ID: $entryId")
     }
 }

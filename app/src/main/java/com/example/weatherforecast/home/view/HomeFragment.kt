@@ -1,27 +1,15 @@
 package com.example.weatherforecast.home.view
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
-import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentHomeBinding
 import com.example.weatherforecast.home.view_model.HomeViewModel
 import com.example.weatherforecast.home.view_model.HomeViewModelFactory
@@ -34,17 +22,10 @@ import com.example.weatherforecast.utilities.ApiState
 import com.example.weatherforecast.utilities.Converts
 import com.example.weatherforecast.utilities.Formatter
 import com.example.weatherforecast.utilities.LocationUtils
-import com.example.weatherforecast.utilities.NetworkConnection
 import com.example.weatherforecast.utilities.SettingsConstants
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 
 const val PERMISSION_ID = 3012
@@ -147,10 +128,8 @@ class HomeFragment : Fragment() {
 
 
     private fun setWeatherDataToViews(weatherResponse: WeatherResponse) {
-        val description =  weatherResponse.current?.weather?.get(0)?.description ?: "UnKnow"
+        val description =  weatherResponse.current?.weather?.get(0)?.icon ?: "UnKnow"
         val temp = weatherResponse.current?.temp?.toInt() ?: 0
-
-
 
         homeBinding.tempImageDes.setImageResource(Formatter.getWeatherImage(weatherResponse.current?.weather?.get(0)?.icon ?: "01d"))
         val location = Location("").apply {
@@ -158,8 +137,8 @@ class HomeFragment : Fragment() {
             longitude = weatherResponse.lon ?: 0.0
         }
         homeBinding.countryName.text = LocationUtils.getAddress(requireActivity(), location)
-        homeBinding.currentData.text = Formatter.getDate(weatherResponse.current?.dt)
-        homeBinding.desTemp.text =description
+        homeBinding.currentData.text = Formatter.getDate(weatherResponse.current?.dt) + " | " +  (Formatter.getFormattedHour(weatherResponse.current?.dt?.toLong())) ?: "12:00 PM"
+        homeBinding.desTemp.text = weatherResponse.current?.weather?.get(0)?.description ?: "UnKnow"
         homeBinding.humitiyValue.text = (weatherResponse.current?.humidity ?: "0").toString() + " %"
         homeBinding.textView2.text = (Converts.getWindSpeed(weatherResponse.current?.windSpeed) ?: "0").toString() + " "+ SettingsConstants.getWindSpeed()
         homeBinding.pressureValue.text = (weatherResponse.current?.pressure  ?: "0").toString()
@@ -169,21 +148,10 @@ class HomeFragment : Fragment() {
         hourlyAdapter.submitList(weatherResponse.hourly)
         dailyAdapter.submitList(weatherResponse.daily)
 
-        val (sunriseTime, sunsetTime) = Formatter.getSunriseAndSunset(
-            (weatherResponse.current?.sunrise ?: 0) * 1000L,
-            (weatherResponse.current?.sunset ?: 0) * 1000L
-        )
-
-        val currentTimePeriod = if (System.currentTimeMillis().toString() in sunriseTime..sunsetTime) {
-            "AM"
-        } else {
-            "PM"
-        }
 
         val suitableBackground = Formatter.getSuitableBackground(
             requireContext(),
             description,
-            currentTimePeriod,
             homeBinding.weatherView
         )
 

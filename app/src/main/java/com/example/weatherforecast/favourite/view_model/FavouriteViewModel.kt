@@ -23,7 +23,7 @@ class FavouriteViewModel(
         getAllProduct()
     }
 
-    private fun getAllProduct() {
+    fun getAllProduct() {
         viewModelScope.launch(Dispatchers.IO) {
             iWeatherRepo.getLocalAllLocation()
                 .catch { e -> _locationList.value = ApiState.Failed(e) }

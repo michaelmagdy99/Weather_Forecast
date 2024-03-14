@@ -6,7 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface IWeatherRemoteDataSource {
      fun getCurrentWeather(
          lat: Double,
-         lon: Double,
-         lang:String,
-         units:String ) : Flow<WeatherResponse>
+         lon: Double) : Flow<WeatherResponse>
 }

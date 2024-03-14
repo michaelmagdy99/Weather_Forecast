@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentSettingsBinding
-import com.example.weatherforecast.utilities.LanguageUtilts
 import com.example.weatherforecast.utilities.SettingsConstants
 import com.example.weatherforecast.sharedprefernces.SharedPreferencesHelper
+import com.example.weatherforecast.utilities.LanguageUtils
 
 class SettingsFragment : Fragment() {
 
@@ -79,9 +79,9 @@ class SettingsFragment : Fragment() {
         pref.insertInData()
         pref.saveAsNewSetting(1)
 
-        LanguageUtilts.setAppLocale(SettingsConstants.getLang(), requireContext())
-        LanguageUtilts.setAppLayoutDirections(SettingsConstants.getLang(), requireContext())
-        LanguageUtilts.changeLang(requireActivity(), SettingsConstants.getLang())
+        LanguageUtils.setAppLocale(SettingsConstants.getLang(), requireContext())
+        LanguageUtils.setAppLayoutDirections(SettingsConstants.getLang(), requireContext())
+        LanguageUtils.changeLang(requireActivity(), SettingsConstants.getLang())
 
         requireActivity().recreate()
     }

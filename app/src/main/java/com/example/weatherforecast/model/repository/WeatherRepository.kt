@@ -1,17 +1,19 @@
 package com.example.weatherforecast.model.repository
 
 import android.util.Log
+import com.example.weatherforecast.model.database.IWeatherLocalDataSource
 import com.example.weatherforecast.model.database.WeatherLocalDataSource
 import com.example.weatherforecast.model.dto.Alert
 import com.example.weatherforecast.model.dto.FaviourateLocationDto
 import com.example.weatherforecast.model.dto.WeatherResponse
+import com.example.weatherforecast.model.remote.IWeatherRemoteDataSource
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
 import com.example.weatherforecast.utilities.SettingsConstants
 import kotlinx.coroutines.flow.Flow
 
 class WeatherRepository(
-    private val weatherRemoteDataSource: WeatherRemoteDataSource,
-    private val weatherLocalDataSource: WeatherLocalDataSource,
+    private val weatherRemoteDataSource: IWeatherRemoteDataSource,
+    private val weatherLocalDataSource: IWeatherLocalDataSource,
     ) : IWeatherRepository {
 
     companion object{
@@ -27,14 +29,11 @@ class WeatherRepository(
             }
         }
     }
-    override suspend fun getCurrentWeather(lat: Double, lon: Double): Flow<WeatherResponse> {
-        val lang = SettingsConstants.getLang()
-        val unit = "metric"
-        Log.i("TAG", "getCurrentWeather: $lat $lon")
-        return weatherRemoteDataSource.getCurrentWeather(lat, lon, lang, unit)
+    override fun getCurrentWeather(lat: Double, lon: Double): Flow<WeatherResponse> {
+        return weatherRemoteDataSource.getCurrentWeather(lat, lon)
     }
 
-    override suspend fun getLocalAllLocation(): Flow<List<FaviourateLocationDto>> {
+    override fun getLocalAllLocation(): Flow<List<FaviourateLocationDto>> {
         return weatherLocalDataSource.getAllLocation()
     }
 
@@ -46,13 +45,11 @@ class WeatherRepository(
         weatherLocalDataSource.deleteLocation(location)
     }
 
-    override suspend fun getFavouriteWeather(
+    override fun getFavouriteWeather(
         lat: Double,
         lon: Double,
-        lang: String,
-        units: String
     ): Flow<WeatherResponse> {
-        return weatherRemoteDataSource.getCurrentWeather(lat, lon, lang, units)
+        return weatherRemoteDataSource.getCurrentWeather(lat, lon)
     }
 
     override suspend fun insertAlert(alert: Alert) {

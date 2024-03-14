@@ -31,7 +31,7 @@ class WeatherLocalDataSource(private val dao: WeatherDao): IWeatherLocalDataSour
         dao.delete(location)
     }
 
-    override suspend fun getAllLocation(): Flow<List<FaviourateLocationDto>> {
+    override fun getAllLocation(): Flow<List<FaviourateLocationDto>> {
         return dao.getAllLocation()
     }
 

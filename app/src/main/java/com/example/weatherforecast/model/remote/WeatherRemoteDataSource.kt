@@ -1,6 +1,7 @@
 package com.example.weatherforecast.model.remote
 
 import com.example.weatherforecast.utilities.Constants
+import com.example.weatherforecast.utilities.SettingsConstants
 import kotlinx.coroutines.flow.flow
 
 class WeatherRemoteDataSource private constructor(private val service: WeatherWebService) : IWeatherRemoteDataSource{
@@ -19,10 +20,10 @@ class WeatherRemoteDataSource private constructor(private val service: WeatherWe
 
     override fun getCurrentWeather(
         lat: Double,
-        lon: Double,
-        lang: String,
-        units: String
+        lon: Double
     )= flow {
+        val lang = SettingsConstants.getLang()
+        val units = "metric"
         emit(service.getCurrentWeather(lat,lon,Constants.API_KEY,lang,units))
     }
 

@@ -7,14 +7,13 @@ import com.example.weatherforecast.R
 import com.github.matteobattilana.weather.PrecipType
 import com.github.matteobattilana.weather.WeatherView
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 object Formatter {
-    fun convertUnixToTime(unixSeconds: Long): String {
-        val milliseconds = unixSeconds * 1000L
-        val date = Date(milliseconds)
+    fun convertUnixToTime(unixSeconds: Long?): String {
+        val milliseconds = unixSeconds?.times(1000L)
+        val date = Date(milliseconds!!)
         val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
         return timeFormat.format(date)
     }
@@ -32,91 +31,43 @@ object Formatter {
         return sdf.format(date)
     }
 
-    fun getSuitableBackground(context: Context, desc: String, hour: String, weatherView: WeatherView): Drawable? {
-        return when {
-            desc.equals("clear sky")-> {
+    fun getSuitableBackground(context: Context,desc: String, weatherView: WeatherView): Drawable? {
+        return when (desc){
+            "01d"-> {
                 weatherView.setWeatherData(PrecipType.CLEAR)
-                if (hour.equals("PM")) {
-                    getDrawable(context,R.drawable.night_bg)
-                } else {
-                    getDrawable(context,R.drawable.sunny_bg)
-                }
+                getDrawable(context, R.drawable.sunny_bg)
             }
-
-            desc.equals("few clouds") -> {
+            "01n"-> {
                 weatherView.setWeatherData(PrecipType.CLEAR)
-                if (hour.equals("PM")) {
-                    getDrawable(context,R.drawable.cloudy_bg)
-                } else {
-                    getDrawable(context,R.drawable.cloduy_mo)
-                }
+                getDrawable(context, R.drawable.night_bg)
             }
-
-            desc.equals("scattered clouds") -> {
+            "02d" , "03d" ,"04d"->{
                 weatherView.setWeatherData(PrecipType.CLEAR)
-                if (hour.equals("PM")) {
-                    getDrawable(context,R.drawable.cloudy_bg)
-                } else {
-                    getDrawable(context,R.drawable.cloduy_mo)
-                }
+                getDrawable(context, R.drawable.cloduy_mo)
             }
-            desc.equals("broken clouds") -> {
+            "02n", "03n", "04n"->{
                 weatherView.setWeatherData(PrecipType.CLEAR)
-                if (hour.equals("PM")) {
-                    getDrawable(context,R.drawable.cloudy_bg)
-                } else {
-                    getDrawable(context,R.drawable.cloduy_mo)
-                }
+                getDrawable(context, R.drawable.cloudy_bg)
             }
-            desc.equals("shower rain") -> {
+            "09d","9n","10d","10n"-> {
                 weatherView.setWeatherData(PrecipType.RAIN)
-                if (hour.equals("PM")) {
-                    getDrawable(context,R.drawable.rainy_bg)
-                } else {
-                    getDrawable(context,R.drawable.rainy_bg)
-                }
+                getDrawable(context, R.drawable.rainy_bg)
             }
-            desc.equals("rain") -> {
-                weatherView.setWeatherData(PrecipType.RAIN)
-                if (hour.equals("PM")) {
-                    getDrawable(context,R.drawable.rainy_bg)
-                } else {
-                    getDrawable(context,R.drawable.rainy_bg)
-                }
-            }
-            desc.equals("thunderstorm") -> {
-                weatherView.setWeatherData(PrecipType.RAIN)
-                if (hour.equals("PM")) {
-                    getDrawable(context,R.drawable.cloudy_bg)
-                } else {
-                    getDrawable(context,R.drawable.cloduy_mo)
-                }
-            }
-            desc.equals("snow") -> {
+            "13d","13n"-> {
                 weatherView.setWeatherData(PrecipType.SNOW)
-                if (hour.equals("PM")) {
-                    getDrawable(context,R.drawable.snow_bg)
-                } else {
-                    getDrawable(context,R.drawable.snow_bg)
-                }
+                getDrawable(context, R.drawable.snow_bg)
             }
-            desc.equals("mist") -> {
-                weatherView.setWeatherData(PrecipType.CLEAR)
-                if (hour.equals("PM")) {
-                    getDrawable(context,R.drawable.snow_bg)
-                } else {
-                    getDrawable(context,R.drawable.snow_bg)
-                }
+            "11d","11n"->{
+                weatherView.setWeatherData(PrecipType.RAIN)
+                getDrawable(context, R.drawable.rainy_bg)
             }
-            desc.equals("light snow") -> {
+            "50d","50n"-> {
                 weatherView.setWeatherData(PrecipType.SNOW)
-                if (hour.equals("PM")) {
-                    getDrawable(context, R.drawable.snow_bg)
-                } else {
-                    getDrawable(context, R.drawable.snow_bg)
-                }
+                getDrawable(context, R.drawable.snow_bg)
             }
-            else -> getDrawable(context, R.drawable.snow_bg)
+            else ->{
+                getDrawable(context, R.drawable.sunny_bg)
+            }
         }
     }
 
