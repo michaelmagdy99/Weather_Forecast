@@ -2,8 +2,24 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.WeatherForecast" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/my_light_primary</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
     </style>
 
-    <style name="Theme.WeatherForecast" parent="Base.Theme.WeatherForecast" />
+    <style name="Theme.WeatherForecast" parent="Base.Theme.WeatherForecast" >
+        <item name="android:windowTranslucentNavigation" >true</item>
+    </style>
+
+
+    <style name="MyDatePickerDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorAccent">@color/background_btn</item>
+        <item name="android:textColorPrimary">@color/background_btn</item>
+    </style>
+
+    <style name="MyTimePickerDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorAccent">@color/background_btn</item>
+        <item name="android:textColorPrimary">@color/background_btn</item>
+
+    </style>
+
 </resources>

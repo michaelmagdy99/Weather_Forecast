@@ -3,31 +3,76 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/chooseDialogFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.weatherforecast.home.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/home"
+        android:name="com.example.weatherforecast.home.view.HomeFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home" >
+        <argument
+            android:name="FavLocation"
+            app:argType="com.example.weatherforecast.model.dto.FaviourateLocationDto"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="destinationDescription"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="current" />
+    </fragment>
     <fragment
-        android:id="@+id/alertFragment"
-        android:name="com.example.weatherforecast.alert.AlertFragment"
-        android:label="fragment_alert"
+        android:id="@+id/alert"
+        android:name="com.example.weatherforecast.alert.view.AlertFragment"
+        android:label="@string/alert"
         tools:layout="@layout/fragment_alert" />
     <fragment
-        android:id="@+id/mapFragment"
+        android:id="@+id/map"
         android:name="com.example.weatherforecast.map.MapFragment"
-        android:label="fragment_map"
-        tools:layout="@layout/fragment_map" />
+        android:label="@string/map"
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_map_to_favourite"
+            app:destination="@id/favourite" />
+        <action
+            android:id="@+id/action_map_to_home"
+            app:destination="@id/home" />
+        <argument
+            android:name="from"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="map" />
+    </fragment>
     <fragment
-        android:id="@+id/favouriteFragment"
-        android:name="com.example.weatherforecast.favourite.FavouriteFragment"
-        android:label="fragment_favourite"
-        tools:layout="@layout/fragment_favourite" />
+        android:id="@+id/favourite"
+        android:name="com.example.weatherforecast.favourite.view.FavouriteFragment"
+        android:label="@string/favourite"
+        tools:layout="@layout/fragment_favourite" >
+        <action
+            android:id="@+id/action_favourite_to_map"
+            app:destination="@id/map" />
+        <action
+            android:id="@+id/action_favourite_to_home"
+            app:destination="@id/home" />
+    </fragment>
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.example.weatherforecast.settings.SettingsFragment"
-        android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        android:id="@+id/settings"
+        android:name="com.example.weatherforecast.settings.view.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settings_to_map"
+            app:destination="@id/map" />
+    </fragment>
+    <fragment
+        android:id="@+id/chooseDialogFragment"
+        android:name="com.example.weatherforecast.dialog.ChooseDialogFragment"
+        android:label="ChooseDialogFragment" >
+        <action
+            android:id="@+id/action_chooseDialogFragment_to_map"
+            app:destination="@id/map" />
+        <action
+            android:id="@+id/action_chooseDialogFragment_to_home"
+            app:destination="@id/home" />
+    </fragment>
 </navigation>
