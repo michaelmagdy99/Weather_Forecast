@@ -2,7 +2,7 @@
 
 ## The Android SDK Version 34
 
-These Application are developed by student of ITI intake#44, Native Mobile Application Development track.
+These Application are developed by trainee of ITI intake (44) Native Mobile Application Development track.
 
 ## Overview
 
