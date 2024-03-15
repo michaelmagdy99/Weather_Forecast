@@ -42,8 +42,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var fusedClient : FusedLocationProviderClient
     var currentLat = ""
     var currentLong = ""
-
-
+    companion object {
+          var isMapFragment: Boolean = false
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +79,21 @@ class MainActivity : AppCompatActivity() {
         )
 
         homeActivityMainBinding.toolbarButton.setOnClickListener {
-            homeActivityMainBinding.drawerLayout.openDrawer(GravityCompat.START)
+            if (isMapFragment) {
+                navController.popBackStack()
+                isMapFragment = false
+            } else {
+                homeActivityMainBinding.drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            isMapFragment = destination.id == R.id.map
+            if (isMapFragment) {
+                homeActivityMainBinding.toolbarButton.setImageResource(R.drawable.back)
+            } else {
+                homeActivityMainBinding.toolbarButton.setImageResource(R.drawable.menu)
+            }
         }
     }
 
