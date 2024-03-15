@@ -45,7 +45,7 @@ class AlertWorker(private val appContext: Context, workerParams: WorkerParameter
                 try {
                     val alert = repo.getAlertWithId(alertId)
 
-                    val weather = repo.getFavouriteWeather(
+                    val weather = repo.getCurrentWeather(
                         alert.lat,
                         alert.lon,
                     )

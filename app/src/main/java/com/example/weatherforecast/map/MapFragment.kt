@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import com.example.weatherforecast.MainActivity
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentMapBinding
 import com.example.weatherforecast.favourite.view_model.FavouriteViewModel
@@ -36,6 +37,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener
 
     var latitude = 0.0
     var longitude = 0.0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +47,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener
         mapBinding.cardLocation.visibility = View.GONE
         mapBinding.map.getMapAsync(this)
 
+        MainActivity.isMapFragment = true
 
         favViewModelFactory = FavouriteViewModelFactory(
             WeatherRepository.getInstance(

@@ -1,5 +1,6 @@
 package com.example.weatherforecast.home.view
 
+import android.content.Context
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentHomeBinding
 import com.example.weatherforecast.home.view_model.HomeViewModel
 import com.example.weatherforecast.home.view_model.HomeViewModelFactory
@@ -18,14 +20,19 @@ import com.example.weatherforecast.model.dto.WeatherResponse
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
 import com.example.weatherforecast.model.repository.WeatherRepository
 import com.example.weatherforecast.sharedprefernces.SharedPreferencesHelper
-import com.example.weatherforecast.utilities.ApiState
+import com.example.weatherforecast.utilities.UiState
 import com.example.weatherforecast.utilities.Converts
 import com.example.weatherforecast.utilities.Formatter
 import com.example.weatherforecast.utilities.LocationUtils
+import com.example.weatherforecast.utilities.NetworkConnection
 import com.example.weatherforecast.utilities.SettingsConstants
+import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.io.FileNotFoundException
+import java.io.IOException
 
 
 const val PERMISSION_ID = 3012
@@ -48,7 +55,6 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         homeBinding = FragmentHomeBinding.inflate(inflater, container, false)
-
         return homeBinding.root
     }
 
@@ -88,42 +94,53 @@ class HomeFragment : Fragment() {
             homeViewModel.getCurrentWeather(lat, long)
         }
 
+        //check network and load last data in file
+        if (!NetworkConnection.checkConnectionState(requireActivity())) {
+            setWeatherDataToViews(loadWeatherResponseFromFile()!!)
+            Snackbar.make(view, getString(R.string.network_connection_has_been_issues), Snackbar.LENGTH_INDEFINITE)
+                .setAction("Dismiss") { }
+                .show()
+        }
+        else {
+            lifecycleScope.launch(Dispatchers.Main) {
+                homeViewModel.weatherStateFlow.collectLatest {
+                    when (it) {
+                        is UiState.Success -> {
+                            saveResponseToFile(it.data)
+                            Log.i("TAG", "onViewCreated: " + it.data.timezone)
+                            setWeatherDataToViews(it.data)
+                            homeBinding.progressBar.visibility = View.GONE
+                            homeBinding.background.visibility = View.VISIBLE
+                            homeBinding.emptyData.visibility = View.GONE
+                            homeBinding.textDataNo.visibility = View.GONE
+                            homeBinding.home.visibility = View.GONE
+                        }
 
-        lifecycleScope.launch(Dispatchers.Main) {
-            homeViewModel.weatherStateFlow.collectLatest {
-                when(it){
-                    is ApiState.Success -> {
-                        Log.i("TAG", "onViewCreated: "+ it.data.timezone)
-                        setWeatherDataToViews(it.data)
-                        homeBinding.progressBar.visibility = View.GONE
-                        homeBinding.background.visibility = View.VISIBLE
-                        homeBinding.emptyData.visibility = View.GONE
-                        homeBinding.textDataNo.visibility = View.GONE
-                        homeBinding.home.visibility = View.GONE
-                    }
-                    is ApiState.Failed -> {
-                        Log.i("TAG", "onViewCreated: failed" + it.msg.toString())
-                        homeBinding.progressBar.visibility = View.GONE
-                        homeBinding.background.visibility = View.GONE
-                        homeBinding.emptyData.visibility = View.VISIBLE
-                        homeBinding.textDataNo.visibility = View.VISIBLE
-                        homeBinding.home.visibility = View.VISIBLE
-                    }
-                    is ApiState.Loading -> {
-                        Log.i("TAG", "onViewCreated: loading")
-                        homeBinding.background.visibility = View.GONE
-                        homeBinding.progressBar.visibility = View.VISIBLE
-                        homeBinding.emptyData.visibility = View.GONE
-                        homeBinding.textDataNo.visibility = View.GONE
-                        homeBinding.home.visibility = View.VISIBLE
-                    }
-                    else -> {
-                        Log.i("TAG", "onViewCreated: else")
+                        is UiState.Failed -> {
+                            Log.i("TAG", "onViewCreated: failed" + it.msg.toString())
+                            homeBinding.progressBar.visibility = View.GONE
+                            homeBinding.background.visibility = View.GONE
+                            homeBinding.emptyData.visibility = View.VISIBLE
+                            homeBinding.textDataNo.visibility = View.VISIBLE
+                            homeBinding.home.visibility = View.VISIBLE
+                        }
+
+                        is UiState.Loading -> {
+                            Log.i("TAG", "onViewCreated: loading")
+                            homeBinding.background.visibility = View.GONE
+                            homeBinding.progressBar.visibility = View.VISIBLE
+                            homeBinding.emptyData.visibility = View.GONE
+                            homeBinding.textDataNo.visibility = View.GONE
+                            homeBinding.home.visibility = View.VISIBLE
+                        }
+
+                        else -> {
+                            Log.i("TAG", "onViewCreated: else")
+                        }
                     }
                 }
             }
         }
-
     }
 
 
@@ -158,6 +175,29 @@ class HomeFragment : Fragment() {
         suitableBackground?.let {
             homeBinding.background.background = it
 
+        }
+    }
+
+    private fun saveResponseToFile(response: WeatherResponse) {
+        val context = requireContext().applicationContext
+        val filename = "weather_response.json"
+        val jsonString = Gson().toJson(response)
+        context.openFileOutput(filename, Context.MODE_PRIVATE).use { outputStream ->
+            outputStream.write(jsonString.toByteArray())
+        }
+    }
+
+
+    private fun loadWeatherResponseFromFile(): WeatherResponse? {
+        val filename = "weather_response.json"
+        return try {
+            val inputStream = requireActivity().openFileInput(filename)
+            val jsonString = inputStream.bufferedReader().use { it.readText() }
+            Gson().fromJson(jsonString, WeatherResponse::class.java)
+        } catch (e: FileNotFoundException) {
+            null
+        } catch (e: IOException) {
+            null
         }
     }
 
