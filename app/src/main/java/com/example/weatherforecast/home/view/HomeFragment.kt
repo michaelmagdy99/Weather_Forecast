@@ -69,16 +69,10 @@ class HomeFragment : Fragment() {
         )
         homeViewModel = ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
 
-        dailyAdapter = DailyAdapter(requireContext())
-        hourlyAdapter = HourlyAdapter(requireContext())
-
-        layoutManagerDaily = LinearLayoutManager(context)
-        homeBinding.recyclerDailyWeather.layoutManager = layoutManagerDaily
-        layoutManagerHourly = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        homeBinding.recyclerHourlyWeather.layoutManager = layoutManagerHourly
-
-        homeBinding.recyclerDailyWeather.adapter = dailyAdapter
-        homeBinding.recyclerHourlyWeather.adapter = hourlyAdapter
+        setUpRecyclerView()
+        homeBinding.swipeContainer.setOnRefreshListener {
+            loadData()
+        }
 
         val args = HomeFragmentArgs.fromBundle(requireArguments())
         val favLocation = args.favLocation
@@ -100,41 +94,70 @@ class HomeFragment : Fragment() {
             Snackbar.make(view, getString(R.string.network_connection_has_been_issues), Snackbar.LENGTH_INDEFINITE)
                 .setAction("Dismiss") { }
                 .show()
+
         }
         else {
-            lifecycleScope.launch(Dispatchers.Main) {
-                homeViewModel.weatherStateFlow.collectLatest {
-                    when (it) {
-                        is UiState.Success -> {
-                            saveResponseToFile(it.data)
-                            Log.i("TAG", "onViewCreated: " + it.data.timezone)
-                            setWeatherDataToViews(it.data)
-                            homeBinding.progressBar.visibility = View.GONE
-                            homeBinding.background.visibility = View.VISIBLE
-                            homeBinding.emptyData.visibility = View.GONE
-                            homeBinding.textDataNo.visibility = View.GONE
-                            homeBinding.home.visibility = View.GONE
-                        }
+            loadData()
+        }
+    }
 
-                        is UiState.Failed -> {
-                            Log.i("TAG", "onViewCreated: failed" + it.msg.toString())
-                            homeBinding.progressBar.visibility = View.GONE
-                            homeBinding.background.visibility = View.GONE
-                            homeBinding.emptyData.visibility = View.VISIBLE
-                            homeBinding.textDataNo.visibility = View.VISIBLE
-                            homeBinding.home.visibility = View.VISIBLE
-                        }
+    private fun setUpRecyclerView() {
+        dailyAdapter = DailyAdapter(requireContext())
+        hourlyAdapter = HourlyAdapter(requireContext())
 
-                        is UiState.Loading -> {
-                            Log.i("TAG", "onViewCreated: loading")
-                            homeBinding.background.visibility = View.GONE
-                            homeBinding.progressBar.visibility = View.VISIBLE
-                            homeBinding.emptyData.visibility = View.GONE
-                            homeBinding.textDataNo.visibility = View.GONE
-                            homeBinding.home.visibility = View.VISIBLE
-                        }
+        layoutManagerDaily = LinearLayoutManager(context)
+        homeBinding.recyclerDailyWeather.layoutManager = layoutManagerDaily
+        layoutManagerHourly = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        homeBinding.recyclerHourlyWeather.layoutManager = layoutManagerHourly
 
-                        else -> {
+        homeBinding.recyclerDailyWeather.adapter = dailyAdapter
+        homeBinding.recyclerHourlyWeather.adapter = hourlyAdapter
+    }
+
+    private fun loadData(){
+        if (!NetworkConnection.checkConnectionState(requireActivity())) {
+            homeBinding.swipeContainer.isRefreshing = false
+            Snackbar.make(requireView(), getString(R.string.network_connection_has_been_issues), Snackbar.LENGTH_INDEFINITE)
+                .setAction("Dismiss") { }
+                .show()
+            return
+        }
+
+        else{
+            homeBinding.swipeContainer.isRefreshing = false
+        lifecycleScope.launch(Dispatchers.Main) {
+            homeViewModel.weatherStateFlow.collectLatest {
+                when (it) {
+                    is UiState.Success -> {
+                        saveResponseToFile(it.data)
+                        Log.i("TAG", "onViewCreated: " + it.data.timezone)
+                        setWeatherDataToViews(it.data)
+                        homeBinding.progressBar.visibility = View.GONE
+                        homeBinding.background.visibility = View.VISIBLE
+                        homeBinding.emptyData.visibility = View.GONE
+                        homeBinding.textDataNo.visibility = View.GONE
+                        homeBinding.home.visibility = View.GONE
+                    }
+
+                    is UiState.Failed -> {
+                        Log.i("TAG", "onViewCreated: failed" + it.msg.toString())
+                        homeBinding.progressBar.visibility = View.GONE
+                        homeBinding.background.visibility = View.GONE
+                        homeBinding.emptyData.visibility = View.VISIBLE
+                        homeBinding.textDataNo.visibility = View.VISIBLE
+                        homeBinding.home.visibility = View.VISIBLE
+                    }
+
+                    is UiState.Loading -> {
+                        Log.i("TAG", "onViewCreated: loading")
+                        homeBinding.background.visibility = View.GONE
+                        homeBinding.progressBar.visibility = View.VISIBLE
+                        homeBinding.emptyData.visibility = View.GONE
+                        homeBinding.textDataNo.visibility = View.GONE
+                        homeBinding.home.visibility = View.VISIBLE
+                    }
+
+                    else -> {
                             Log.i("TAG", "onViewCreated: else")
                         }
                     }
@@ -181,6 +204,10 @@ class HomeFragment : Fragment() {
     private fun saveResponseToFile(response: WeatherResponse) {
         val context = requireContext().applicationContext
         val filename = "weather_response.json"
+
+        // Clear the file before saving the response
+        context.deleteFile(filename)
+
         val jsonString = Gson().toJson(response)
         context.openFileOutput(filename, Context.MODE_PRIVATE).use { outputStream ->
             outputStream.write(jsonString.toByteArray())
