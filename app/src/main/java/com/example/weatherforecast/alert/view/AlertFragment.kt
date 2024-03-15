@@ -23,30 +23,23 @@ import android.widget.TextView
 import android.widget.Toast.LENGTH_LONG
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.Constraints
-import androidx.work.Data
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import androidx.work.WorkRequest
 import com.example.weatherforecast.R
 import com.example.weatherforecast.alert.AlertUtils
 import com.example.weatherforecast.alert.reciver.AlarmReceiver
 import com.example.weatherforecast.alert.view_model.AlertViewModel
 import com.example.weatherforecast.alert.view_model.AlertViewModelFactory
 import com.example.weatherforecast.alert.work_manager.AlertType
-import com.example.weatherforecast.alert.work_manager.AlertWorker
 import com.example.weatherforecast.databinding.FragmentAlertBinding
 import com.example.weatherforecast.model.database.WeatherLocalDataSource
 import com.example.weatherforecast.model.dto.Alert
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
 import com.example.weatherforecast.model.repository.WeatherRepository
 import com.example.weatherforecast.sharedprefernces.SharedPreferencesHelper
-import com.example.weatherforecast.utilities.ApiState
+import com.example.weatherforecast.utilities.UiState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
@@ -55,8 +48,6 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import java.util.concurrent.TimeUnit
-import kotlin.math.log
 
 class AlertFragment : Fragment()  {
 
@@ -84,7 +75,7 @@ class AlertFragment : Fragment()  {
     ): View? {
         // Inflate the layout for this fragment
         alertBinding = FragmentAlertBinding.inflate(inflater, container, false)
-        askAboutPermissions()
+        askPermissions()
         return alertBinding.root
     }
 
@@ -119,7 +110,7 @@ class AlertFragment : Fragment()  {
         lifecycleScope.launch(Dispatchers.Main) {
             alertViewModel.alerts.collectLatest {
                 when (it) {
-                    is ApiState.Success -> {
+                    is UiState.Success -> {
                         if (it.data.isEmpty()){
                             alertBinding.alertRc.visibility = View.GONE
                             alertBinding.emptyAlert.visibility = View.VISIBLE
@@ -132,13 +123,13 @@ class AlertFragment : Fragment()  {
                         }
                     }
 
-                    is ApiState.Failed -> {
+                    is UiState.Failed -> {
                         alertBinding.alertRc.visibility = View.GONE
                         alertBinding.emptyAlert.visibility = View.VISIBLE
                         alertBinding.noAlert.visibility = View.VISIBLE
                     }
 
-                    is ApiState.Loading -> {
+                    is UiState.Loading -> {
                         Log.i("TAG", "onViewCreated: loading")
                         alertBinding.alertRc.visibility = View.GONE
                         alertBinding.emptyAlert.visibility = View.VISIBLE
@@ -278,7 +269,7 @@ class AlertFragment : Fragment()  {
     }
 
 
-    private fun checkDisplayOverOtherAppPerm() {
+    private fun checkAppPermmission() {
         if (!Settings.canDrawOverlays(requireContext())) {
             val intent = Intent(
                 Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -309,25 +300,25 @@ class AlertFragment : Fragment()  {
         someActivityResultLauncher.launch(intent)
     }
 
-    private fun askAboutPermissions() {
+    private fun askPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             requireActivity().setShowWhenLocked(true)
             requireActivity().setTurnScreenOn(true)
         }
         if (!Settings.canDrawOverlays(requireActivity())) {
-            checkDrawOverAppsPermissionsDialog()
+            checkPermissionsDialog()
         }
     }
 
-    private fun checkDrawOverAppsPermissionsDialog() {
+    private fun checkPermissionsDialog() {
         AlertDialog.Builder(requireActivity()).setTitle(getString(R.string.permission_request))
             .setCancelable(false)
             .setMessage(getString(R.string.please_allow_display_apps_permission))
             .setPositiveButton(
                 "Yes"
-            ) { _, _ -> checkDisplayOverOtherAppPerm() }.setNegativeButton(
+            ) { _, _ -> checkAppPermmission() }.setNegativeButton(
                 "No"
-            ) { _, _ -> errorWarningForNotGivingDrawOverAppsPermissions()
+            ) { _, _ -> errorWarningForAppsPermissions()
             }.show()
     }
 
@@ -346,7 +337,7 @@ class AlertFragment : Fragment()  {
     }
 
 
-    private fun errorWarningForNotGivingDrawOverAppsPermissions() {
+    private fun errorWarningForAppsPermissions() {
         AlertDialog.Builder(requireActivity()).setTitle(getString(R.string.warning))
             .setCancelable(false).setMessage(
                 getString(R.string.unfortunately_the_display_over_other_apps_permission_is_not_granted)

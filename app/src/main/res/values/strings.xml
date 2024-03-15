@@ -50,4 +50,5 @@
     <string name="warning">Warning</string>
     <string name="permission_request">Permission Request</string>
     <string name="weather_alarm">Weather Alarm</string>
+    <string name="network_connection_has_been_issues">Network connection has been Issues</string>
 </resources>

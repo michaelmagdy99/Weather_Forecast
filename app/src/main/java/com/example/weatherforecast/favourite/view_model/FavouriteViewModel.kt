@@ -4,8 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecast.model.dto.FaviourateLocationDto
 import com.example.weatherforecast.model.repository.IWeatherRepository
-import com.example.weatherforecast.model.repository.WeatherRepository
-import com.example.weatherforecast.utilities.ApiState
+import com.example.weatherforecast.utilities.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,19 +15,19 @@ class FavouriteViewModel(
     private val iWeatherRepo : IWeatherRepository,
 ) : ViewModel() {
 
-    private val _locationList = MutableStateFlow<ApiState<List<FaviourateLocationDto>>>(ApiState.Loading<List<FaviourateLocationDto>>())
-    val locationList : StateFlow<ApiState<List<FaviourateLocationDto>>> = _locationList
+    private val _locationList = MutableStateFlow<UiState<List<FaviourateLocationDto>>>(UiState.Loading<List<FaviourateLocationDto>>())
+    val locationList : StateFlow<UiState<List<FaviourateLocationDto>>> = _locationList
 
     init {
-        getAllProduct()
+        getAllLocation()
     }
 
-    fun getAllProduct() {
+    fun getAllLocation() {
         viewModelScope.launch(Dispatchers.IO) {
             iWeatherRepo.getLocalAllLocation()
-                .catch { e -> _locationList.value = ApiState.Failed(e) }
+                .catch { e -> _locationList.value = UiState.Failed(e) }
                 .collect{
-                    _locationList.value = ApiState.Success(it)
+                    _locationList.value = UiState.Success(it)
                 }
         }
     }
@@ -36,7 +35,7 @@ class FavouriteViewModel(
     fun deleteLocation(location: FaviourateLocationDto) {
         viewModelScope.launch(Dispatchers.IO) {
             iWeatherRepo.deleteLocation(location)
-            getAllProduct()
+            getAllLocation()
         }
     }
 

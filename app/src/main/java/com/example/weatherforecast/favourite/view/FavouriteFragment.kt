@@ -16,12 +16,13 @@ import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentFavouriteBinding
 import com.example.weatherforecast.favourite.view_model.FavouriteViewModel
 import com.example.weatherforecast.favourite.view_model.FavouriteViewModelFactory
-import com.example.weatherforecast.map.MapFragmentDirections
 import com.example.weatherforecast.model.database.WeatherLocalDataSource
+import com.example.weatherforecast.model.dto.Alert
 import com.example.weatherforecast.model.dto.FaviourateLocationDto
 import com.example.weatherforecast.model.remote.WeatherRemoteDataSource
 import com.example.weatherforecast.model.repository.WeatherRepository
-import com.example.weatherforecast.utilities.ApiState
+import com.example.weatherforecast.utilities.UiState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -80,7 +81,7 @@ class FavouriteFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
             favViewModel.locationList.collectLatest {
                 when (it) {
-                    is ApiState.Success -> {
+                    is UiState.Success -> {
                         if (it.data.isEmpty()){
                             favouriteBinding.favRc.visibility = View.GONE
                             favouriteBinding.emptyFav.visibility = View.VISIBLE
@@ -93,13 +94,13 @@ class FavouriteFragment : Fragment() {
                         }
                     }
 
-                    is ApiState.Failed -> {
+                    is UiState.Failed -> {
                         favouriteBinding.favRc.visibility = View.GONE
                         favouriteBinding.emptyFav.visibility = View.VISIBLE
                         favouriteBinding.noPlaceTv.visibility = View.VISIBLE
                     }
 
-                    is ApiState.Loading -> {
+                    is UiState.Loading -> {
                         Log.i("TAG", "onViewCreated: loading")
                         favouriteBinding.favRc.visibility = View.GONE
                         favouriteBinding.emptyFav.visibility = View.VISIBLE
@@ -116,7 +117,7 @@ class FavouriteFragment : Fragment() {
 
         val itemTouchHelper = ItemTouchHelper(
             object : ItemTouchHelper.SimpleCallback(
-                0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                0,  ItemTouchHelper.RIGHT
             ) {
                 override fun onMove(
                     recyclerView: RecyclerView,
@@ -129,11 +130,27 @@ class FavouriteFragment : Fragment() {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val position = viewHolder.adapterPosition
                     val location = favAdater.currentList[position]
-                    favViewModel.deleteLocation(location)
+                    checkDeleteDialog(location)
                 }
             }
         )
         itemTouchHelper.attachToRecyclerView(favouriteBinding.favRc)
+
+    }
+
+
+    private fun checkDeleteDialog(location: FaviourateLocationDto) {
+        val deleteAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
+        deleteAlertDialogBuilder
+            .setTitle(getString(R.string.deleted_from_alert))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                favViewModel.deleteLocation(location)
+            }
+            .setNegativeButton(getString(R.string.no)) { _, _ ->
+                favViewModel.getAllLocation()
+            }
+            .show()
 
     }
 }

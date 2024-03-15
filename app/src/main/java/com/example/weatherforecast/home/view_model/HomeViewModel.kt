@@ -5,8 +5,7 @@
     import androidx.lifecycle.viewModelScope
     import com.example.weatherforecast.model.dto.WeatherResponse
     import com.example.weatherforecast.model.repository.IWeatherRepository
-    import com.example.weatherforecast.model.repository.WeatherRepository
-    import com.example.weatherforecast.utilities.ApiState
+    import com.example.weatherforecast.utilities.UiState
     import kotlinx.coroutines.Dispatchers
     import kotlinx.coroutines.flow.MutableStateFlow
     import kotlinx.coroutines.flow.StateFlow
@@ -17,27 +16,30 @@
         private val iWeatherRepo: IWeatherRepository
     ) : ViewModel() {
 
-        private val _weatherMutableStateFlow = MutableStateFlow<ApiState<WeatherResponse>>(ApiState.Loading<WeatherResponse>())
+        private val _weatherMutableStateFlow = MutableStateFlow<UiState<WeatherResponse>>(UiState.Loading<WeatherResponse>())
 
-        val weatherStateFlow: StateFlow<ApiState<WeatherResponse>> = _weatherMutableStateFlow
+        val weatherStateFlow: StateFlow<UiState<WeatherResponse>> = _weatherMutableStateFlow
         fun getCurrentWeather(lat: Double, lon: Double) {
             viewModelScope.launch(Dispatchers.IO) {
                 iWeatherRepo.getCurrentWeather(lat, lon)
-                    .catch { _weatherMutableStateFlow.value = ApiState.Failed(it) }
+                    .catch { _weatherMutableStateFlow.value = UiState.Failed(it) }
                     .collect {
-                        _weatherMutableStateFlow.value = ApiState.Success(it)
+                        _weatherMutableStateFlow.value = UiState.Success(it)
                     }
             }
         }
 
         fun getFavoriteWeather(lat :Double, long: Double){
             viewModelScope.launch(Dispatchers.IO) {
-                iWeatherRepo.getFavouriteWeather(lat,long)
-                    .catch { _weatherMutableStateFlow.value = ApiState.Failed(it) }
-                    .collect{
-                        Log.i("TAG", "onViewCreated: "+ it.timezone)
-                        _weatherMutableStateFlow.value = ApiState.Success(it)
-                    }
+                try {
+                    iWeatherRepo.getFavouriteWeather(lat, long)
+                        .catch { e -> throw e }
+                        .collect {
+                            _weatherMutableStateFlow.value = UiState.Success(it)
+                        }
+                } catch (e: Exception) {
+                    _weatherMutableStateFlow.value = UiState.Failed(e)
+                }
             }
         }
 
