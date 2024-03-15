@@ -43,7 +43,7 @@ object Formatter {
             }
             "02d" , "03d" ,"04d"->{
                 weatherView.setWeatherData(PrecipType.CLEAR)
-                getDrawable(context, R.drawable.cloduy_mo)
+                getDrawable(context, R.drawable.sunny_bg)
             }
             "02n", "03n", "04n"->{
                 weatherView.setWeatherData(PrecipType.CLEAR)

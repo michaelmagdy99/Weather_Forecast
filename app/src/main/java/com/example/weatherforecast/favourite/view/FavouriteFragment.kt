@@ -142,7 +142,7 @@ class FavouriteFragment : Fragment() {
     private fun checkDeleteDialog(location: FaviourateLocationDto) {
         val deleteAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
         deleteAlertDialogBuilder
-            .setTitle(getString(R.string.deleted_from_alert))
+            .setTitle(getString(R.string.deleted_from_fav))
             .setCancelable(false)
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 favViewModel.deleteLocation(location)

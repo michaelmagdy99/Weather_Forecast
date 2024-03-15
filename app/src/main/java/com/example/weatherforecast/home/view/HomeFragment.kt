@@ -70,6 +70,7 @@ class HomeFragment : Fragment() {
         homeViewModel = ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
 
         setUpRecyclerView()
+
         homeBinding.swipeContainer.setOnRefreshListener {
             loadData()
         }
@@ -125,7 +126,7 @@ class HomeFragment : Fragment() {
 
         else{
             homeBinding.swipeContainer.isRefreshing = false
-        lifecycleScope.launch(Dispatchers.Main) {
+            lifecycleScope.launch(Dispatchers.Main) {
             homeViewModel.weatherStateFlow.collectLatest {
                 when (it) {
                     is UiState.Success -> {
