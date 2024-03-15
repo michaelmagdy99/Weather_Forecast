@@ -181,6 +181,10 @@ class HomeFragment : Fragment() {
     private fun saveResponseToFile(response: WeatherResponse) {
         val context = requireContext().applicationContext
         val filename = "weather_response.json"
+
+        // Clear the file before saving the response
+        context.deleteFile(filename)
+
         val jsonString = Gson().toJson(response)
         context.openFileOutput(filename, Context.MODE_PRIVATE).use { outputStream ->
             outputStream.write(jsonString.toByteArray())
